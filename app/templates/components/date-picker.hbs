@@ -3,7 +3,7 @@
         <div class="date-picker-head">
             <a href="#" class="arrow" {{action prevMonth}}>&#10094;</a>
             <span class="title">
-                <span class="title-text">{{title}}</span>
+                <span class="title-text">{{scope.title}}</span>
             </span>
             <a href="#" class="arrow" {{action nextMonth}}>&#10095;</a>
         </div>
@@ -30,10 +30,11 @@
                 Sa
             </div>
         </div>
-        <div class="values">... {{days}} ...
-          {{#each days as |day index|}}
+        <div class="values">
+          {{#each scope.days as |day index|}}
             <div class="value"  ng-class="{ outside : day.isOutsideMonth, today : day.isToday, active : isActive(day.date) }" {{action selectDay day}}>
-                {{day.date}}
+                {{!--day.date--}}
+              {{moment-format day.date 'DD' }}
             </div>
           {{/each}}
         </div>

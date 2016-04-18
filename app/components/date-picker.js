@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import moment from 'moment';
 
 const {
   Component,
@@ -9,16 +10,19 @@ const {
 } = Ember;
 
 export default Ember.Component.extend({
+  moment: Ember.inject.service(),
+
   tagName: 'div',
   className: 'date-picker',
   scope: {},
-  today: Date.today(),
+  today: moment().format(),
   activeDate: null,
   day: null,
   days: Ember.A([]),
 
   willInsertElement(){
-    this.set('activeDate', this.get('today').clone());
+    Ember.Logger.debug(this.get('today'));
+    this.set('activeDate', moment(this.get('today')));
   },
 
   didInsertElement(){
@@ -29,25 +33,29 @@ export default Ember.Component.extend({
   setMonth(toDate){
     Ember.Logger.debug(toDate, this.get('activeDate'));
       this.set('activeDate', toDate);
-      let startDate = this.get('activeDate').clone().moveToFirstDayOfMonth(), // get first day of active month
-          startDateDOW = startDate.getDay(); // get day of the week for the active start date of the active month
+      let startDate = moment(this.get('activeDate')).date(1), // get first day of active month
+          startDateDOW = startDate.day(); // get day of the week for the active start date of the active month
+
       // Set the startDate to the previous Sunday
       if (startDateDOW === 0){
           startDate.add(-7).days();
       } else {
           startDate.add(startDateDOW * -1).days();
       }
-      this.set('scope.title', this.get('activeDate').toString('MMMM yyyy'));
+      this.set('scope.title', this.get('activeDate').format('MMMM YYYY'));
       let days = new Array(42);
       for (let i = 0; i < days.length; i++){
-          let date = startDate.clone().add(i).days();
+          let date = moment(startDate).add(i, 'd');
+            Ember.Logger.debug("date",date);
           days[i] = {
               date : date,
-              isOutsideMonth : (date.getMonth() !== this.get('activeDate').getMonth()) ? true : false,
-              isToday : (Date.equals(date, this.get('today')))
+              isOutsideMonth : (moment().date(date) !== moment().date(this.get('activeDate'))) ? true : false,
+              isToday : (moment(date).isSame(this.get('today')))
           };
       }
       this.set('scope.days', days);
+      //this.set('days', days);
+      Ember.Logger.debug(this.get('scope.days'));
   },
 
   selectDay(dayObj){
