@@ -1,0 +1,184 @@
+$actions-col-width : 160px;
+$date-col-width: 70px;
+$name-col-width: 250px;
+
+
+.poll-wrapper {
+    margin-top:20px;
+    @include box-sizing(border-box);
+    border-radius:0;
+    border:0;
+    border-top:1px solid $border-clr;
+    width:calc(100% + 50px);
+    margin-left:-25px;
+    position:relative;
+    margin-bottom:-20px;
+    &:after {
+        content:"";
+        position:absolute;
+        top:0;
+        right:0;
+        width:100px;
+        height:100%;
+        pointer-events: none;
+        @include linear-gradient(90deg, rgba(white,0), white);
+    }
+}
+.poll {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.poll-header {
+    display:table;
+    min-width: 100%;
+    padding-top:em(20);
+    overflow:hidden;
+    border-bottom:1px solid $border-clr;
+    box-shadow: 0 3px 0 rgba($border-clr, 0.3);
+    .header {
+        display:table-cell;
+        vertical-align:bottom;
+        padding-bottom:10px;
+        &.date-header {
+            text-align:center;
+            min-width: $date-col-width;
+            width: $date-col-width;
+        }
+        &.actions-header {
+            min-width: $actions-col-width;
+            @include box-sizing(border-box);
+        }
+        &.participants-header {
+            @include box-sizing(border-box);
+            font-weight: bold;
+            min-width: $name-col-width;
+            width: $name-col-width;
+            padding-left: 20px;
+        }
+    }
+}
+
+.poll-body {
+    min-width:100%;
+    overflow:hidden;
+    display:table;
+    .poll-example {
+        position:relative;
+        &.hidden {
+            display:none;
+        }
+        .overlay {
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height: 100%;
+            border-bottom:1px solid $border-clr;
+            background: rgba(white, 0.75);
+            text-align: center;
+            .overlay-text {
+                position:absolute;
+                top:50%;
+                left:50%;
+                font-size: em(18px);
+                font-weight: bold;
+                color: $text-3-clr;
+                background: rgba(white, 0.9);
+                padding: 10px;
+                @include transform(translateX(-50%) translateY(-50%));
+            }
+        }
+    }
+    .poll-entry.highlight {
+        background: lighten($border-clr,10%);
+    }
+    .poll-entry {
+        display:table;
+        min-width: 100%;
+        border-bottom: 1px solid rgba($border-clr,0.5);
+        &:last-child {
+            border-bottom:0;
+        }
+        .hover {
+            visibility:hidden;
+        }
+        &:hover {
+            .hover {
+                visibility: visible;
+            }
+        }
+        .cell {
+            display:table-cell;
+            height: 50px;
+            vertical-align:middle;
+            @include box-sizing(border-box);
+            &.name-cell {
+                min-width: $name-col-width;
+                width: $name-col-width;
+                font-size: em(14px);
+                padding-left:20px;
+                .avatar {
+                    display:inline-block;
+                    padding: 5px;
+                    margin-right: 5px;
+                    border-radius: 2px;
+                    background: #D0D5DF;
+                    @for $i from 0 to length($color-collection) {
+                        &.style-#{$i + 1} {
+                            background: nth($color-collection, $i+1);
+                        }
+                    }
+                }
+                .name {
+                    padding: 5px 3px;
+                    margin-left: 2px;
+                    margin-top:-1px;
+                    border-radius: 2px;
+                    white-space: nowrap;
+                    overflow:hidden;
+                    display:inline-block;
+                    vertical-align:middle;
+                    text-overflow: ellipsis;
+                    width:180px;
+                    &.editable:hover {
+                        background: $background-clr;
+                        cursor: pointer;
+                    }
+                }
+                .form-control {
+                    @include form-input;
+                    padding:em(5px);
+                    width:180px;
+                    font-size:em(16px);
+                }
+            }
+            &.action-cell {
+                min-width: $actions-col-width;
+            }
+            &.vote-cell {
+                min-width: $date-col-width;
+                width: $date-col-width;
+                text-align:center;
+                position: relative;
+                .overlay {
+                    position: absolute;
+                    top:0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 10;
+                    &:hover {
+                        background: rgba($border-clr, 0.2);
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+        &.ng-submitted {
+            .ng-invalid {
+                border-color: $pink-clr !important;
+            }
+        }
+    }
+}

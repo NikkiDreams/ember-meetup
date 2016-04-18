@@ -1,0 +1,55 @@
+<div class="section-details">
+    <div class="section-title">Settings</div>
+</div>
+<div class="section-main">
+    <div class="switch-row" ng-if="event._id">
+        <div class="switch-details">
+            <div class="title">
+                Poll Status
+            </div>
+            <div class="description">
+                Let people vote on the poll.
+            </div>
+        </div>
+        <div class="switch">
+            <div class="switch-value">
+                //event.isClosed ? 'Closed' : 'Open' //
+            </div>
+            <div switch-toggle ng-model="event.isClosed" invert>
+            </div>
+        </div>
+    </div>
+    <div class="switch-row">
+        <div class="switch-details">
+            <div class="title">
+                Notifications
+            </div>
+            <div class="description">
+                Send me an email when someone votes or comments on the event.
+            </div>
+        </div>
+        <div class="switch">
+            <div class="switch-value">
+                //event.creator.allowNotifications ? 'Enabled' : 'Disabled' //
+            </div>
+            <div switch-toggle ng-model="event.creator.allowNotifications">
+            </div>
+        </div>
+    </div>
+    <div class="switch-row" ng-if="event._id">
+        <div class="switch-details">
+            <div class="title">
+                Delete Event
+            </div>
+            <div class="description">
+                Once you delete an event it will no longer be accessible.
+            </div>
+        </div>
+        <div class="switch">
+            <button type="button" ng-click="deleteEvent()" class="btn" ng-class="{danger : !deleteRequestSent, disabled : deleteRequestSent}">
+              //deleteRequestSent ? 'Request Sent' : 'Delete Event' //
+            </button>
+        </div>
+    </div>
+</div>
+{{yield}}

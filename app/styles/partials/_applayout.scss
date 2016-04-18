@@ -1,0 +1,30 @@
+$navigation-width: 200px;
+$top-bar-height: 60px;
+$min-width: 820px;
+
+.outer-container {
+    width:100%;
+    overflow:hidden;
+    @include outer-container(1337px);
+    padding:0 40px;
+}
+
+body {
+    background: $background-clr;
+    color: $text-clr;
+}
+
+.main-navigation {
+    float:left;
+    width:160px;
+}
+.main-content {
+    margin-left: 200px;
+    background: $background-clr;
+    overflow-y: auto;
+    padding:40px 0;
+    .main-view {
+        position:relative;
+        width:100%;
+    }
+}

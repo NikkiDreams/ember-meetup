@@ -1,0 +1,17 @@
+<div class="box">
+  <div class="box-message animated zoomIn" ng-show="eventUrl">
+    <div class="main-image">
+        <img src="/images/success_large.png" width="100" />
+    </div>
+    <div class="title">Event Created</div>
+    <div class="content">
+        Your event has been created successfully! An email has been sent to each participant with a link to the event page.
+    </div>
+    <div class="mini-divider">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" disabled="true" value="{{eventUrl}}" />
+        <a href="{{eventUrl}}" class="btn form-btn">GO</a>
+    </div>
+  </div>
+</div>{{outlet}}

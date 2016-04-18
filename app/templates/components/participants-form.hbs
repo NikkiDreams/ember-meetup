@@ -1,0 +1,14 @@
+<div class="section-details">
+    <div class="section-title">Invite Participants</div>
+</div>
+<div class="section-main">
+    <div class="form-row">
+        <div class="form-group optional">
+            <label>Participant's Emails</label>
+            <tags-input max-length="50" allowed-tags-pattern="{{emailRegex}}" display-property="email" ng-model="event.emails" placeholder="Add an Email" type="email" autocomplete="off"></tags-input>
+            <input type="hidden" name="shouldCreate" value="true" />
+
+        </div>
+    </div>
+</div>
+{{yield}}

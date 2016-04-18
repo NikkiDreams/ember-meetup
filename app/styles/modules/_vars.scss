@@ -1,0 +1,27 @@
+$dark-blue-clr: #2E3A54;
+$green-clr: #75C062;
+$pink-clr: #E55A84;
+$red-clr: #E06488;
+$blue-clr: #009DE2;
+$light-blue-clr: #F5F6F8;
+$orangered-clr: #FF5D5D;
+
+$text-clr: #3D4043;
+$text-2-clr: #828B9A;
+$text-3-clr: #AEB4BE;
+$border-clr: #D9DDE3;
+$navigation-bg-clr: $dark-blue-clr;
+$background-clr: $light-blue-clr;
+
+$color-collection: (#8A75AE, #80A1DA, #B3DD8B, #7EE4E4, #FCD285, #F7967F, #E8669D, #F7B6E7, #B9A4E5, #88D0CB);
+
+$mobile-size:em(320);
+$tablet-size:720px;
+$desktop-size:em(960);
+$largedesktop-size:em(1050);
+
+// Bourbon Neat Breakpoints
+$mobile: new-breakpoint(min-width $mobile-size 4);
+$tablet: new-breakpoint(max-width $tablet-size 8);
+$desktop: new-breakpoint(min-width $desktop-size 12);
+$largedesktop: new-breakpoint(min-width $largedesktop-size 16);

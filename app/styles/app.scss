@@ -1,0 +1,62 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,600,700);
+@import "bourbon/bourbon";
+$gutter: golden-ratio(4em, 1) !default;
+@import "neat/neat";
+@import "modules/vars";
+@import "modules/mixins";
+@import "partials/normalize";
+
+body {
+    font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+    padding: 40px;
+}
+
+a {
+    color: $blue-clr;
+}
+
+.button-new-event {
+    position:relative;
+    display:inline-block;
+    color:white;
+    font-size:em(12);
+    font-weight: bold;
+    text-decoration:none;
+    margin:0 5px;
+    padding: 10px 15px;
+    background: #5C6881;
+    border-radius: 2px;
+    @include transition(background 0.2s ease-in-out);
+    &:hover {
+        background: darken(#5C6881, 5%);
+    }
+    &.primary {
+        background: $green-clr;
+        &:hover {
+            background: darken($green-clr, 5%);
+        }
+    }
+}
+@import "partials/applayout";
+@import "partials/navigation";
+@import "partials/topbar";
+@import "partials/ui/animations";
+@import "partials/ui/buttons";
+@import "partials/ui/form";
+@import "partials/ui/box";
+@import "partials/ui/datepicker";
+@import "partials/ui/modal";
+@import "partials/ui/poll";
+@import "partials/ui/tags";
+@import "partials/ui/dropdown";
+@import "partials/ui/comments";
+@import "partials/ui/switch";
+@import "partials/ui/notification";
+@import "partials/ui/timepicker";
+
+@import "partials/pages/home";
+@import "partials/pages/event";
+@import "partials/pages/newevent";
+@import "partials/pages/404";
+
+@import "partials/media/mobile";

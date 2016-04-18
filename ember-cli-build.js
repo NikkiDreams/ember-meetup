@@ -20,5 +20,18 @@ module.exports = function(defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
+  app.import('bower_components/DateJS/build/date.js', {
+    type: 'vendor',
+    prepend: false
+  });
+  app.import('bower_components/DateJS/build/date-en-US.js', {
+    type: 'vendor',
+    prepend: false
+  });
+  app.import('bower_components/skrollr/src/skrollr.js', {
+    type: 'vendor',
+    prepend: false
+  });
+
   return app.toTree();
 };

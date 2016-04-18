@@ -1,0 +1,90 @@
+form {
+    margin:0;
+    &.ng-submitted {
+        .ng-invalid {
+            border-color: $pink-clr !important;
+        }
+    }
+}
+
+.form-container {
+    width:100%;
+}
+
+.form-row {
+    @include row();
+    @include user-select(none);
+}
+
+.form-col {
+    @include span-columns(6);
+    &.padded {
+        &:first-child {
+            padding: 0 20px 0 0;
+        }
+        &:last-child {
+            padding: 0 0 0 20px;
+        }
+    }
+}
+
+.form-group {
+    margin-bottom:10px;
+    & > label {
+        font-size:em(11px);
+        color: $text-3-clr;
+        margin-bottom:5px;
+        display:inline-block;
+
+    }
+    .form-error {
+        font-size: em(12px);
+        color: $red-clr;
+        float: right;
+        img {
+            vertical-align:bottom;
+            margin-right: 3px;
+        }
+    }
+    &.optional > label:after {
+        content: " (optional)";
+        color: $text-3-clr;
+    }
+    &.error {
+        input.form-control, textarea.form-control {
+
+            border-color: $pink-clr;
+            background: rgba($pink-clr,0.02);
+        }
+    }
+    input.form-control, textarea.form-control {
+        @include form-input;
+    }
+    .form-btn {
+        padding: em(12px) em(15px);
+    }
+    input.form-control {
+        vertical-align:middle;
+        padding: em(8px) em(12px);
+    }
+
+    textarea.form-control {
+        min-height: 135px;
+        padding: em(8px) em(10px);
+    }
+
+}
+
+
+.form-submit-message {
+    display:inline-block;
+    margin-left: em(5px);
+    font-size: em(12px);
+    &.error {
+        color: $red-clr;
+    }
+    img {
+        vertical-align:middle;
+        margin-right: em(5px);
+    }
+}

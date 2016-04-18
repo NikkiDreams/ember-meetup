@@ -1,0 +1,27 @@
+.page-placeholder {
+    margin:0 auto;
+    text-align:center;
+    color:#B0B8C4;
+    position:absolute;
+    top:50%;
+    left: 50%;
+    width: 100%;
+    padding:0 20px;
+    @include box-sizing(border-box);
+    @include transform(translateX(-50%) translateY(-50%));
+    .image {
+        margin-bottom:20px;
+    }
+    .title {
+        font-size: em(36);
+        font-weight: bold;
+        margin-bottom: em(5);
+    }
+    .content {
+        font-size: em(14);
+        line-height: em(21);
+        font-weight: normal;
+        max-width:360px;
+        margin: 0 auto em(20) auto;
+    }
+}
