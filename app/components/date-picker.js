@@ -20,49 +20,47 @@ export default Ember.Component.extend({
   day: null,
   days: Ember.A([]),
 
-  willInsertElement(){
-    Ember.Logger.debug(this.get('today'));
+  didReceiveAttrs(){
     this.set('activeDate', moment(this.get('today')));
-  },
-
-  didInsertElement(){
-    Ember.Logger.debug(this.get('activeDate'));
+    //Ember.Logger.debug(this.get('activeDate'));
     this.setMonth(this.get('activeDate'));
   },
 
   setMonth(toDate){
-    Ember.Logger.debug(toDate, this.get('activeDate'));
+    //Ember.Logger.debug(toDate, this.get('activeDate'));
       this.set('activeDate', toDate);
-      let startDate = moment(this.get('activeDate')).date(1), // get first day of active month
+      let startDate = moment(this.get('activeDate')).startOf('month'), // get first day of active month
           startDateDOW = startDate.day(); // get day of the week for the active start date of the active month
 
       // Set the startDate to the previous Sunday
       if (startDateDOW === 0){
-          startDate.add(-7).days();
+          startDate = moment(startDate).day(-7);
       } else {
-          startDate.add(startDateDOW * -1).days();
+          startDate = moment(startDate).day(0);
       }
-      this.set('scope.title', this.get('activeDate').format('MMMM YYYY'));
+
+      this.set('scope.title', moment(this.get('activeDate')).format('MMMM YYYY'));
       let days = new Array(42);
       for (let i = 0; i < days.length; i++){
           let date = moment(startDate).add(i, 'd');
-            Ember.Logger.debug("date",date);
+            //Ember.Logger.debug("date",moment(date),moment().date());
           days[i] = {
               date : date,
-              isOutsideMonth : (moment().date(date) !== moment().date(this.get('activeDate'))) ? true : false,
-              isToday : (moment(date).isSame(this.get('today')))
+              isOutsideMonth : (moment(date).isSame(this.get('activeDate'), 'month')) ? false : true,
+              isToday : ( moment(date).date() === moment().date() )
           };
       }
       this.set('scope.days', days);
       //this.set('days', days);
-      Ember.Logger.debug(this.get('scope.days'));
+      //Ember.Logger.debug(this.get('scope.days'));
   },
 
   selectDay(dayObj){
+    Ember.Logger.debug('message',dayObj,this.get('scope'));
       if (dayObj.isOutsideMonth) {
-          setMonth(dayObj.date);
+          this.setMonth(dayObj.date);
       }
-      if ((index = this.get('scope').isActive(dayObj.date, true)) !== -1) {
+      if ( this.isActive(dayObj.date, true) !== -1) {
           // Already selected
           this.get('scope').model.splice(index, 1); // remove
       } else {
@@ -70,7 +68,7 @@ export default Ember.Component.extend({
           let index = 0,
               inserted = false;
           do {
-              if (this.get('scope').model[index] === undefined || Date.compare(Date.parse(this.get('scope').model[index]), dayObj.date) > 0){
+              if (this.get('scope').model[index] === undefined || moment(this.get('scope').model[index]).isSame(dayObj.date) > 0){
                   this.get('scope').model.splice(index, 0, dayObj.date);
                   inserted = true;
               }
@@ -93,15 +91,15 @@ export default Ember.Component.extend({
   },
 
   nextMonth(){
-      setMonth(activeDate.clone().add(1).months());
+      this.setMonth(moment(this.get('activeDate')).add(1, 'M'));
   },
 
   prevMonth(){
-      setMonth(activeDate.clone().add(-1).months());
+      this.setMonth(moment(this.get('activeDate')).subtract(1, 'M'));
   },
 
   removeDate(date){
-      if ((index = this.get('scope').isActive(Date.parse(date), true)) !== -1) {
+      if ((index = this.get('scope').isActive(moment(date), true)) !== -1) {
           this.get('scope').model.splice(index, 1);
       }
   }

@@ -32,9 +32,9 @@
         </div>
         <div class="values">
           {{#each scope.days as |day index|}}
-            <div class="value"  ng-class="{ outside : day.isOutsideMonth, today : day.isToday, active : isActive(day.date) }" {{action selectDay day}}>
+            <div class="value {{if day.isOutsideMonth 'outside'}} {{if day.isToday 'today'}} {{!--if day.isActive(day.date) 'active' --}}" {{action selectDay day}}>
                 {{!--day.date--}}
-              {{moment-format day.date 'DD' }}
+              {{moment-format day.date 'D'}}
             </div>
           {{/each}}
         </div>
