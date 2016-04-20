@@ -1,43 +1,76 @@
-<div class="date-picker">
-    <div class="wrapper">
-        <div class="date-picker-head">
-            <a href="#" class="arrow" {{action prevMonth}}>&#10094;</a>
-            <span class="title">
-                <span class="title-text">{{scope.title}}</span>
+<div class="section-details">
+  <div class="section-title">Choose Dates</div>
+  <ul class="daticon-list">
+    {{#each selectedDates as |event index|}}
+      <li ng-repeat="d in event.dates">
+        <div class="daticon">
+          <div class="dow">
+            {{moment-format event 'ddd'}}
+          </div>
+          <div class="day">
+            {{moment-format event 'D'}}
+          </div>
+          <div class="month">
+            {{moment-format event 'MM'}}
+          </div>
+          <span class="delete" {{action removeDate event}}></span>
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+</div>
+<div class="section-main">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="email">Calendar</label>
+      <span class="form-error" ng-show="form.$submitted && form.datepicker.$error.required">
+                <img src="/images/error.png" width="14" /> You need to select a few dates
             </span>
-            <a href="#" class="arrow" {{action nextMonth}}>&#10095;</a>
-        </div>
-        <div class="dow">
-            <div class="day">
+      <div ng-model="event.dates">
+        <div class="date-picker">
+          <div class="wrapper">
+            <div class="date-picker-head">
+              <a href="#" class="arrow" {{action prevMonth}}>&#10094;</a>
+              <span class="title">
+                <span class="title-text">{{title}}</span>
+              </span>
+              <a href="#" class="arrow" {{action nextMonth}}>&#10095;</a>
+            </div>
+            <div class="dow">
+              <div class="day">
                 Su
-            </div>
-            <div class="day">
+              </div>
+              <div class="day">
                 Mo
-            </div>
-            <div class="day">
+              </div>
+              <div class="day">
                 Tu
-            </div>
-            <div class="day">
+              </div>
+              <div class="day">
                 We
-            </div>
-            <div class="day">
+              </div>
+              <div class="day">
                 Th
-            </div>
-            <div class="day">
+              </div>
+              <div class="day">
                 Fr
-            </div>
-            <div class="day">
+              </div>
+              <div class="day">
                 Sa
+              </div>
             </div>
-        </div>
-        <div class="values">
-          {{#each scope.days as |day index|}}
-            <div class="value {{if day.isOutsideMonth 'outside'}} {{if day.isToday 'today'}} {{!--if day.isActive(day.date) 'active' --}}" {{action selectDay day}}>
-                {{!--day.date--}}
-              {{moment-format day.date 'D'}}
+            <div class="values">
+              {{#each eventDays as |day index|}}
+                <div class="value {{if day.isOutsideMonth 'outside'}} {{if day.isToday 'today'}} {{!--if day.isActive(day.date) 'active'--}}" {{action selectDay day}}>
+                  {{!--day.date--}}
+                  {{moment-format day.date 'D'}}
+                </div>
+              {{/each}}
             </div>
-          {{/each}}
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 {{yield}}

@@ -14,11 +14,25 @@ export default Ember.Component.extend({
 
   tagName: 'div',
   className: 'date-picker',
-  scope: {},
+  title: '',
+
   today: moment().format(),
   activeDate: null,
   day: null,
   days: Ember.A([]),
+
+  eventDays: Ember.A([]),
+  selectedDates: Ember.A([]),
+
+  init() {
+    this._super(...arguments);
+    this.set('selectedDates', []);
+  },
+
+  selectedDatesChanged: Ember.on('init', Ember.observer('selectedDates.[]', function() {
+    // deal with the change
+    Ember.Logger.debug(`selectedDates Array Changed: ${this.get('selectedDates')}`);
+  })),
 
   didReceiveAttrs(){
     this.set('activeDate', moment(this.get('today')));
@@ -39,7 +53,7 @@ export default Ember.Component.extend({
           startDate = moment(startDate).day(0);
       }
 
-      this.set('scope.title', moment(this.get('activeDate')).format('MMMM YYYY'));
+      this.set('title', moment(this.get('activeDate')).format('MMMM YYYY'));
       let days = new Array(42);
       for (let i = 0; i < days.length; i++){
           let date = moment(startDate).add(i, 'd');
@@ -47,43 +61,46 @@ export default Ember.Component.extend({
           days[i] = {
               date : date,
               isOutsideMonth : (moment(date).isSame(this.get('activeDate'), 'month')) ? false : true,
-              isToday : ( moment(date).date() === moment().date() )
+              isToday : ( moment(date).date() === moment().date() ),
+              isActive: (this.isActive(date, i)) ? true : false
           };
       }
-      this.set('scope.days', days);
-      //this.set('days', days);
-      //Ember.Logger.debug(this.get('scope.days'));
+      this.set('eventDays', days);
+      this.set('days', days);
+      //Ember.Logger.debug(this.get('days'));
   },
 
   selectDay(dayObj){
-    Ember.Logger.debug('message',dayObj,this.get('scope'));
+    let activeIndex = this.isActive(dayObj.date, true);
       if (dayObj.isOutsideMonth) {
+        Ember.Logger.debug('selectDay.message', dayObj, this.get('eventDays'));
           this.setMonth(dayObj.date);
       }
-      if ( this.isActive(dayObj.date, true) !== -1) {
+      if ( activeIndex !== -1 ) {
           // Already selected
-          this.get('scope').model.splice(index, 1); // remove
+          this.get('selectedDates').removeAt(activeIndex, 1)//.splice(index, 1); // remove
       } else {
           // Not selected
           let index = 0,
               inserted = false;
           do {
-              if (this.get('scope').model[index] === undefined || moment(this.get('scope').model[index]).isSame(dayObj.date) > 0){
-                  this.get('scope').model.splice(index, 0, dayObj.date);
+              if (this.get('selectedDates')[index] === undefined || moment(this.get('selectedDates')[index]).isSame(dayObj.date) > 0){
+                  this.get('selectedDates').pushObject(dayObj.date); //splice(index, 0, dayObj.date);
                   inserted = true;
+                  Ember.Logger.debug('selectDay.selectedDates added', this.get('selectedDates'));
               }
               index++;
           } while (inserted === false);
       }
   },
 
-  isActive(date, returnIndex){
-      this.set('scope.model', []);
-      for (let i = 0; i < this.get('scope').model.length; i++){
-          let modelDate = Date.parse(this.get('scope').model[i]);
-          if (modelDate.getDate() === date.getDate() &&
-              modelDate.getMonth() === date.getMonth() &&
-              modelDate.getYear() === date.getYear()){
+  isActive(day, returnIndex){
+      //this.set('scope.selectedDates', []);
+      for (let i = 0; i < this.get('selectedDates').length; i++){
+          let selectedDate = moment(this.get('selectedDates')[i]);
+          if (selectedDate.date() === moment(day).date() &&
+              selectedDate.month() === moment(day).month() &&
+              selectedDate.year() === moment(day).year()){
               return (returnIndex) ? i : true;
           }
       }
@@ -99,8 +116,11 @@ export default Ember.Component.extend({
   },
 
   removeDate(date){
-      if ((index = this.get('scope').isActive(moment(date), true)) !== -1) {
-          this.get('scope').model.splice(index, 1);
+    let index = this.isActive(moment(date), true);
+    Ember.Logger.debug('message', index, date);
+      if (index !== -1) {
+          this.get('selectedDates').removeAt(index, 1);
+          Ember.Logger.debug('selectDay.selectedDates remove', this.get('selectedDates'));
       }
   }
 
