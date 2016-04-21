@@ -13,10 +13,10 @@
         </div>
         <div class="switch">
             <div class="switch-value">
-                //event.isClosed ? 'Closed' : 'Open' //
+                {{if isClosed 'Open' 'Closed'}}
             </div>
-            <div switch-toggle ng-model="event.isClosed" invert>
-            </div>
+            {{x-toggle theme='ios' size='small' toggle='setEventStatus' value=isClosed
+                onLabel='Open' offLabel='closed' name='eventStatus'}}
         </div>
     </div>
     <div class="switch-row">
@@ -30,10 +30,10 @@
         </div>
         <div class="switch">
             <div class="switch-value">
-                //event.creator.allowNotifications ? 'Enabled' : 'Disabled' //
+              {{if isNotified 'On' 'Off'}}
             </div>
-            <div switch-toggle ng-model="event.creator.allowNotifications">
-            </div>
+            {{x-toggle theme='ios' size='small' toggle='setEventStatus' value=isNotified
+                onLabel='On' offLabel='Off' name='eventNotifications'}}
         </div>
     </div>
     <div class="switch-row" ng-if="event._id">
@@ -46,8 +46,8 @@
             </div>
         </div>
         <div class="switch">
-            <button type="button" ng-click="deleteEvent()" class="btn" ng-class="{danger : !deleteRequestSent, disabled : deleteRequestSent}">
-              //deleteRequestSent ? 'Request Sent' : 'Delete Event' //
+            <button type="button" {{action 'setEventStatus' 'eventDelete'}} class="btn {{if isDeleted 'disabled' 'danger'}}">
+              {{if isDeleted 'Request Sent' 'Delete Event'}}
             </button>
         </div>
     </div>

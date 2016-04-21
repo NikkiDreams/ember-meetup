@@ -4,7 +4,7 @@
   "description": "Collaboratobve Scheduling in Ember",
   "author": "Nichole 'Nix' Shannon",
   "url": "http://nichole-shannon.us",
-  "repository": "https://github.com/nikkidreams/ember-meetup.git",
+  "repository": "",
   "private": false,
   "directories": {
     "doc": "doc",
@@ -15,7 +15,6 @@
     "start": "ember server",
     "test": "ember test"
   },
-  "repository": "",
   "engines": {
     "node": ">= 4.2.2"
   },
@@ -35,6 +34,7 @@
     "ember-cli-release": "0.2.8",
     "ember-cli-sass": "5.3.1",
     "ember-cli-sri": "^2.1.0",
+    "ember-cli-toggle": "1.0.0",
     "ember-cli-uglify": "^1.2.0",
     "ember-cp-validations": "2.7.2",
     "ember-data": "^2.4.2",

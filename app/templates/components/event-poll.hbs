@@ -2,17 +2,19 @@
     <div class="header participants-header">
         {{event.participants.length}} participants
     </div>
-    <div class="header date-header" ng-repeat="d in event.dates">
+    <div class="header date-header">
         <div class="daticon">
-            <div class="dow">
-                //d | date: 'EEE'//
-            </div>
-            <div class="day">
-                //d | date: 'd'//
-            </div>
-            <div class="month">
-                //d | date : 'MMM'//
-            </div>
+          {{#each event as |date index|}}
+              <div class="dow">
+                {{moment-format date 'ddd'}}
+              </div>
+              <div class="day">
+                {{moment-format date 'D'}}
+              </div>
+              <div class="month">
+                {{moment-format date 'MM'}}
+              </div>
+          {{/each}}
             <span class="count" ng-show="selectedDate($index)" ng-class={top:isTopDate($index)}>//selectedDate($index)//</span>
         </div>
     </div>
