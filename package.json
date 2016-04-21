@@ -1,8 +1,11 @@
 {
   "name": "ember-meetup",
   "version": "0.0.0",
-  "description": "Small description for ember-meetup goes here",
-  "private": true,
+  "description": "Collaboratobve Scheduling in Ember",
+  "author": "Nichole 'Nix' Shannon",
+  "url": "http://nichole-shannon.us",
+  "repository": "https://github.com/nikkidreams/ember-meetup.git",
+  "private": false,
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -14,9 +17,8 @@
   },
   "repository": "",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 4.2.2"
   },
-  "author": "",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",
