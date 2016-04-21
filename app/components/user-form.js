@@ -1,19 +1,23 @@
 import Ember from 'ember';
+import moment from 'moment';
+import {
+  validator, buildValidations
+} from 'ember-cp-validations';
 
-export default Ember.Component.extend({
+const {
+  Component,
+  computed,
+  inject,
+  set,
+  get
+} = Ember;
 
-  link(scope, el, attrs) {
-      scope.errors = {};
 
-      scope.emailRegex = FormHelper.emailRegex;
+export default Ember.Component.extend( {
+  moment: Ember.inject.service(),
+  errors: {},
+  name: null,
+  email: null
 
-      scope.$watchCollection('form.name.$error',(errors) =>{
-          scope.errors.name = FormHelper.prettyError(errors, "Name");
-      });
-
-      scope.$watchCollection('form.email.$error',(errors) =>{
-          scope.errors.email = FormHelper.prettyError(errors, "Email");
-      });
-  }
-
+  //isFormValid: Ember.computed.alias('validations.isValid'),
 });

@@ -6,6 +6,7 @@
     "ember-cli-test-loader": "0.2.2",
     "ember-qunit-notifications": "0.1.0",
     "DateJS": "datejs#^1.0.0-rc3",
-    "skrollr": "^0.6.30"
+    "skrollr": "^0.6.30",
+    "selectize": "^0.12.1"
   }
 }

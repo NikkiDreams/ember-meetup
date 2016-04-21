@@ -2,7 +2,7 @@
   <div class="section-title">Choose Dates</div>
   <ul class="daticon-list">
     {{#each selectedDates as |event index|}}
-      <li ng-repeat="d in event.dates">
+      <li>
         <div class="daticon">
           <div class="dow">
             {{moment-format event 'ddd'}}
@@ -22,11 +22,12 @@
 <div class="section-main">
   <div class="form-row">
     <div class="form-group">
-      <label for="email">Calendar</label>
-      <span class="form-error" ng-show="form.$submitted && form.datepicker.$error.required">
-                <img src="/images/error.png" width="14" /> You need to select a few dates
-            </span>
-      <div ng-model="event.dates">
+      {{#if showMessage}}
+        <span class="error form-error" ng-show="form.$submitted && form.datepicker.$error.required">
+            <img src="/images/error.png" width="14" /> You need to select a few dates
+        </span>
+      {{/if}}
+      <div>
         <div class="date-picker">
           <div class="wrapper">
             <div class="date-picker-head">
@@ -62,7 +63,6 @@
             <div class="values">
               {{#each eventDays as |day index|}}
                 <div class="value {{if day.isOutsideMonth 'outside'}} {{if day.isToday 'today'}} {{!--if day.isActive(day.date) 'active'--}}" {{action selectDay day}}>
-                  {{!--day.date--}}
                   {{moment-format day.date 'D'}}
                 </div>
               {{/each}}

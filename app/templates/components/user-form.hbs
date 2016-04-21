@@ -4,24 +4,10 @@
 <div class="section-main">
     <div class="form-row">
         <div class="form-col">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <span class="form-error" ng-show="(form.name.$touched || form.$submitted) && errors.name">
-                    <img src="/images/error.png" width="14" /> {{errors.name}}
-                </span>
-                <input type="text" id="name" name="name" value="{{creator.name}}" maxlength="40"
-                        required  placeholder="John Doe..." class="form-control extend"/>
-            </div>
+            {{validated-input model=model.creator valuePath='name' placeholder='Name'}}
         </div>
         <div class="form-col">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <span class="form-error" ng-show="(form.email.$touched || form.$submitted) && errors.email">
-                    <img src="/images/error.png" width="14" /> {{errors.email}}
-                </span>
-                <input type="email" id="email" name="email" value="{{creator.email}}"
-                        required  placeholder="john.doe@email.com..." class="form-control extend"/>
-            </div>
+            {{validated-input model=model.creator valuePath='email' placeholder='Email'}}
         </div>
     </div>
 </div>

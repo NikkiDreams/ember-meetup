@@ -1,11 +1,30 @@
 import DS from 'ember-data';
+import { validator, buildValidations } from 'ember-cp-validations';
 
 const {
   Model,
   attr
 } = DS;
 
-export default Model.extend({
+let Validations = buildValidations({
+  'name': {
+    description: 'Name',
+    validators: [
+      validator('presence', true),
+      validator('length', { min: 3 })
+    ]
+  },
+  'email': {
+    description: 'Email',
+    validators:[
+      validator('presence', true),
+      validator('format', { type: 'email' }),
+      validator('length', { min: 5 })
+    ]
+  }
+});
+
+export default Model.extend(Validations,{
   name :  attr('string'),
   email :  attr('string'),
   isVerified : attr('boolean', {defaultValue : false}),

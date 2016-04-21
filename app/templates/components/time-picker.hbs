@@ -1,19 +1,20 @@
 <div class="time-picker">
     <div class="time-picker-col">
         <div class="daticon">
-            <div class="dow">
-                {{!-- date | date: 'EEE' --}}
-                {{date}}
-            </div>
-            <div class="day">
-                {{!--date | date: 'd'--}}
-                {{date}}
-            </div>
-            <div class="month">
-                {{!--date | date : 'MMM'--}}
-                {{date}}
-            </div>
-            <!-- <span class="delete" ng-click="datepicker.unsetDate(date)"></span> -->
+          {{#each selectedDates as |event index|}}
+              <div class="daticon">
+                <div class="dow">
+                  {{moment-format event 'ddd'}}
+                </div>
+                <div class="day">
+                  {{moment-format event 'D'}}
+                </div>
+                <div class="month">
+                  {{moment-format event 'MM'}}
+                </div>
+                <span class="delete" {{action removeDate event}}></span>
+              </div>
+          {{/each}}
         </div>
     </div>
     <div class="time-picker-col" ng-repeat="time in date.times track by $index">
