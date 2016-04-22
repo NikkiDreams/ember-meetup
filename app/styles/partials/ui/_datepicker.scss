@@ -80,12 +80,19 @@
                 color:#818176;
                 &:after {
                     opacity:1;
-                    background: rgba(yellow, 0.1);
+                    background: rgba(blue, 0.1);
                 }
             }
             &.outside {
                 color: $text-3-clr;
                 font-weight:normal;
+            }
+            &.before {
+                color: $red-clr;
+                font-weight:normal;
+                &:hover{
+                  background: transparent !important;
+                }
             }
             &:after {
                 content: " ";
@@ -107,6 +114,14 @@
                     background: rgba($border-clr,0.4);
                 }
                 cursor: pointer;
+            }
+            &.before:hover {
+              &:after {
+                  opacity:0.5;
+                  background: transparent !important;
+                  cursor: not-allowed !important;
+              }
+              cursor: not-allowed !important;
             }
             &.active {
                 background:white;

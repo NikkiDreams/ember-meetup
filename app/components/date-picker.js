@@ -23,6 +23,7 @@ export default Ember.Component.extend({
 
   eventDays: Ember.A([]),
   selectedDates: Ember.A([]),
+  isActive: false,
 
   init() {
     this._super(...arguments);
@@ -61,8 +62,9 @@ export default Ember.Component.extend({
           days[i] = {
               date : date,
               isOutsideMonth : (moment(date).isSame(this.get('activeDate'), 'month')) ? false : true,
-              isToday : ( moment(date).date() === moment().date() ),
-              isActive: (this.isActive(date, i)) ? true : false
+              isBeforeToday : (moment(date).isBefore(this.get('today'))) ? true : false,
+              isToday : (moment(date).isSame(moment(), 'day')) ? true : false,
+              isActive: (this.isActive(date) === true) ? true : false
           };
       }
       this.set('eventDays', days);
@@ -73,11 +75,12 @@ export default Ember.Component.extend({
   selectDay(dayObj){
     let activeIndex = this.isActive(dayObj.date, true);
       if (dayObj.isOutsideMonth) {
-        Ember.Logger.debug('selectDay.message', dayObj, this.get('eventDays'));
+        //Ember.Logger.debug('selectDay.message', dayObj, this.get('eventDays'));
           this.setMonth(dayObj.date);
       }
       if ( activeIndex !== -1 ) {
           // Already selected
+          set(dayObj, 'isActive', false);
           this.get('selectedDates').removeAt(activeIndex, 1)//.splice(index, 1); // remove
       } else {
           // Not selected
@@ -85,9 +88,10 @@ export default Ember.Component.extend({
               inserted = false;
           do {
               if (this.get('selectedDates')[index] === undefined || moment(this.get('selectedDates')[index]).isSame(dayObj.date) > 0){
+                  set(dayObj, 'isActive', true);
                   this.get('selectedDates').pushObject(dayObj.date); //splice(index, 0, dayObj.date);
                   inserted = true;
-                  Ember.Logger.debug('selectDay.selectedDates added', this.get('selectedDates'));
+                  //Ember.Logger.debug('selectDay.selectedDates added', this.get('selectedDates'));
               }
               index++;
           } while (inserted === false);
@@ -117,10 +121,9 @@ export default Ember.Component.extend({
 
   removeDate(date){
     let index = this.isActive(moment(date), true);
-    Ember.Logger.debug('message', index, date);
       if (index !== -1) {
           this.get('selectedDates').removeAt(index, 1);
-          Ember.Logger.debug('selectDay.selectedDates remove', this.get('selectedDates'));
+          //Ember.Logger.debug('selectDay.selectedDates remove', this.get('selectedDates'));
       }
   }
 

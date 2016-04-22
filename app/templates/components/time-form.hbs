@@ -38,7 +38,10 @@
             </td>
           {{/each}}
           <td ng-repeat="time in [1,2,3] track by $index">
-              <input type="text" time-picker ng-model-options="{ updateOn: 'blur' }" ng-model="d.times[$index]" class="time-picker-input" />
+            {{#each dates.times as |time index|}}
+              {{validated-input class="time-picker-input time-picker" model="{{dates.times[index]}}"
+                valuePath='time' ng-model-options="{ updateOn: 'blur' }"}}
+            {{/each}}
           </td>
           </tr>
         </tbody>

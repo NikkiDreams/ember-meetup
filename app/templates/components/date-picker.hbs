@@ -62,9 +62,15 @@
             </div>
             <div class="values">
               {{#each eventDays as |day index|}}
-                <div class="value {{if day.isOutsideMonth 'outside'}} {{if day.isToday 'today'}} {{!--if day.isActive(day.date) 'active'--}}" {{action selectDay day}}>
+              {{#if (and day.isBeforeToday (not day.isToday))}}
+                <div class="value {{if day.isOutsideMonth 'outside'}} {{if day.isBeforeToday 'before'}}">
                   {{moment-format day.date 'D'}}
                 </div>
+              {{else}}
+                <div class="value {{if day.isOutsideMonth 'outside'}} {{if day.isToday 'today'}} {{if day.isActive 'active'}}"   {{action selectDay day}}>
+                  {{moment-format day.date 'D'}}
+                </div>
+              {{/if}}
               {{/each}}
             </div>
           </div>

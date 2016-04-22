@@ -14,12 +14,12 @@ export default Model.extend({
       updated : attr('date'),
       title : attr('string'),
       dates : hasMany('date'),
-      email : attr('string'),
+      emails : hasMany('email'),
       comments : hasMany('comment'),
       location: attr('string'),
       participants : hasMany('participant'),
       isClosed : attr('boolean', {defaultValue : true}),
       isDeleted : attr('boolean', {defaultValue : true}),
       isExample : attr('boolean', {defaultValue : true}),
-      __private : hasMany('code')
+      __private : belongsTo('code')
 });
