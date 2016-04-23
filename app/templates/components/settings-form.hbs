@@ -12,11 +12,8 @@
             </div>
         </div>
         <div class="switch">
-            <div class="switch-value">
-                {{if isClosed 'Open' 'Closed'}}
-            </div>
-            {{x-toggle theme='ios' size='small' toggle='setEventStatus' value=isClosed
-                onLabel='Open' offLabel='closed' name='eventStatus'}}
+            {{x-toggle theme='flip' size='small' toggle='setEventStatus' value=model.isClosed
+                name='eventStatus' onLabel='Open' offLabel='Closed'}}
         </div>
     </div>
     <div class="switch-row">
@@ -29,14 +26,12 @@
             </div>
         </div>
         <div class="switch">
-            <div class="switch-value">
-              {{if isNotified 'On' 'Off'}}
-            </div>
-            {{x-toggle theme='ios' size='small' toggle='setEventStatus' value=isNotified
-                onLabel='On' offLabel='Off' name='eventNotifications'}}
+            {{x-toggle theme='flip' size='small' toggle='setEventStatus' value=model.creator.isNotified
+                name='eventNotifications'}}
         </div>
     </div>
-    <div class="switch-row" ng-if="event._id">
+    {{#unless new}}
+    <div class="switch-row">
         <div class="switch-details">
             <div class="title">
                 Delete Event
@@ -51,5 +46,6 @@
             </button>
         </div>
     </div>
+    {{/unless}}
 </div>
 {{yield}}

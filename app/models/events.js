@@ -18,8 +18,7 @@ export default Model.extend({
       comments : hasMany('comment'),
       location: attr('string'),
       participants : hasMany('participant'),
-      isClosed : attr('boolean', {defaultValue : true}),
-      isDeleted : attr('boolean', {defaultValue : true}),
-      isExample : attr('boolean', {defaultValue : true}),
+      isClosed : attr('boolean', {defaultValue : false}),
+      isDeleted : attr('boolean', {defaultValue : false}),
       __private : belongsTo('code')
 });

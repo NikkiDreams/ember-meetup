@@ -1,21 +1,24 @@
 <div class="section-details">
   <div class="section-title">Choose Dates</div>
   <ul class="daticon-list">
-    {{#each selectedDates as |event index|}}
-      <li>
-        <div class="daticon">
-          <div class="dow">
-            {{moment-format event 'ddd'}}
+    {{!--#each selectedDates as |event index|--}}
+    {{#each selectedDates as |day index|}}
+      {{#if day.isActive}}
+        <li>
+          <div class="daticon">
+            <div class="dow">
+              {{moment-format day.date 'ddd'}}
+            </div>
+            <div class="day">
+              {{moment-format day.date 'D'}}
+            </div>
+            <div class="month">
+              {{moment-format day.date 'MM'}}
+            </div>
+            <span class="delete" {{action removeDate day day.index}}></span>
           </div>
-          <div class="day">
-            {{moment-format event 'D'}}
-          </div>
-          <div class="month">
-            {{moment-format event 'MM'}}
-          </div>
-          <span class="delete" {{action removeDate event}}></span>
-        </div>
-      </li>
+        </li>
+      {{/if}}
     {{/each}}
   </ul>
 </div>

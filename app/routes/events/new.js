@@ -35,9 +35,10 @@ export default Ember.Route.extend({
     // Call _super for default behavior
     this._super(controller, model);
     // Implement your custom setup after
-    this.controllerFor('application').set('event', "new");
+    //this.controllerFor('application').set('event', "new");
     controller.set('model', model);
-    controller.set('event', {});
+    controller.set('events', model);
+    controller.set('events.new', true);
     controller.set('eventTitle', this.get('eventTitle'));
     controller.set('eventDescription', this.get('eventDescription'));
     controller.set('eventCreator', this.get('eventCreator'));
@@ -45,7 +46,7 @@ export default Ember.Route.extend({
   },
 
   submit(e){
-    Ember.Logger.debug("Submit New Event", e);
+    Ember.Logger.debug("Submit New Event", e, this.get('model.events'));
       if (newEventForm.valid){
           let newEvent = new Event(event);
           newEvent.save()

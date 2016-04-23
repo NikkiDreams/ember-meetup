@@ -25,13 +25,12 @@ module.exports = function(environment) {
   };
 
   ENV['ember-cli-toggle'] = {
-    includedThemes: ['ios', 'light', 'default', 'flip'],
-    excludedThemes: ['flip'],
+    includedThemes: ['ios', 'flip'],
     defaultShowLabels: false, // defaults to false
-    defaultTheme: 'ios',   // defaults to 'default'
+    defaultTheme: 'flip',   // defaults to 'default'
     defaultSize: 'small',    // defaults to 'medium'
-    defaultOffLabel: 'False',     // defaults to 'Off'
-    defaultOnLabel: 'True'        // defaults to 'On'
+    defaultOffLabel: 'Off',     // defaults to 'Off'
+    defaultOnLabel: 'On'        // defaults to 'On'
   };
 
   if (environment === 'development') {

@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 const  ConfirmModal = function(options){
-  console.log(options.title);
+  return;//console.log(options);
 };
 
 export default Ember.Component.extend({
@@ -13,7 +13,8 @@ export default Ember.Component.extend({
 
 
   statusDidChange(){
-    let status = this.get('isClosed');
+    //Ember.Logger.debug("statusDidChange",this.get('model.isClosed'));
+    let status = this.get('model.isClosed');
     //open
     if(status){
       let modal = new ConfirmModal({
@@ -33,7 +34,7 @@ export default Ember.Component.extend({
   },
 
   notificationsDidChange(){
-    let status = this.get('isNotified');
+    let status = this.get('model.creator.isNotified');
     //on
     if(status){
       let modal = new ConfirmModal({
@@ -53,7 +54,7 @@ export default Ember.Component.extend({
   },
 
   deleteEvent(){
-    let status = this.get('isDeleted');
+    let status = this.get('model.isDeleted');
     let modal = new ConfirmModal({
         title : 'Are you sure?',
         message : 'The event will no longer be accessible after it is deleted. Are you sure you want to continue?',
@@ -69,22 +70,23 @@ export default Ember.Component.extend({
   },
 
   actions:{
-    setEventStatus(toggleName) {
+    setEventStatus(isToggled, toggleName) {
+      //Ember.Logger.debug("statusDidChange",isToggled, toggleName);
       switch(toggleName) {
         case 'eventStatus': {
-          this.toggleProperty('isClosed');
+          this.toggleProperty('model.isClosed');
           this.statusDidChange();
           break;
         }
 
         case 'eventNotifications': {
-          this.toggleProperty('isNotified');
+          this.toggleProperty('model.creator.isNotified');
           this.notificationsDidChange();
           break;
         }
 
         case 'eventDelete': {
-          this.toggleProperty('isDeleted');
+          this.toggleProperty('model.isDeleted');
           this.deleteEvent();
           break;
         }
