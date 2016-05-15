@@ -8,16 +8,19 @@ const {
 } = DS;
 
 export default Model.extend({
+      creator : belongsTo('creator'),
+
       description : attr('string'),
-      creator : belongsTo('creators'),
-      created : attr('date', { defaultValue() { return new Date(); } }),
-      updated : attr('date'),
+      location: attr('string'),
       title : attr('string'),
       dates : hasMany('date'),
-      emails : hasMany('email'),
-      comments : hasMany('comment'),
-      location: attr('string'),
+
       participants : hasMany('participant'),
+      comments : hasMany('comment'),
+
+      created : attr('date', { defaultValue() { return new Date(); } }),
+      updated : attr('date'),
+
       isClosed : attr('boolean', {defaultValue : false}),
       isDeleted : attr('boolean', {defaultValue : false}),
       __private : belongsTo('code')

@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import moment from 'moment';
+import {uuid} from 'ember-cli-uuid';
 
 const {
   Route,
@@ -11,23 +12,46 @@ const {
 
 export default Ember.Route.extend({
   moment: Ember.inject.service(),
+  store: Ember.inject.service(),
 
-  event: {},
-  eventTitle : "Schedule a New Event",
-  eventDescription : "Fill in the form below to create your event and share it with your friends and colleagues.",
-  eventCreator : null,
-  allowNotifications : true,
+  eventId: uuid(),
+
+  eventHeading : "Schedule a New Event",
+  eventInstruction : "Fill in the form below to create your event and share it with your friends and colleagues.",
+  participantList: [
+    {
+      name: 'Nix Shannon',
+      email: 'nix@nox.com'
+    },
+    {
+      name: 'BooBoo Bunny',
+      email: 'me@u.com'
+    },
+    {
+      name: '',
+      email: 'us@there.com'
+    },
+    {
+      name: '',
+      email: 'what@who.com'
+    }
+  ],
 
   model(params) {
-    return this.store.createRecord('events', {
-      creator: this.store.createRecord('creators'),
-      dates: [this.store.createRecord('date')],
-      emails: [this.store.createRecord('email')],
-      comments: [this.store.createRecord('comment')],
-      participants: [this.store.createRecord('participant',{
-        votes: [this.store.createRecord('vote')]
-      })],
-      __private: this.store.createRecord('code')
+    return this.store.createRecord('event', {
+      id: this.get('eventId'),
+      description : '',
+      location: '',
+      title : '',
+      created : new Date(),
+      //updated : new Date(),
+      //comments : [this.store.createRecord('comment')],
+      //creator: this.store.createRecord('creator',{allowNotifications:true}),
+      //dates: [this.store.createRecord('date')],
+      //participants: [this.store.createRecord('participant')],
+      isClosed: false,
+      isDeleted: false,
+      //__private: this.store.createRecord('code')
     });
   },
 
@@ -35,18 +59,16 @@ export default Ember.Route.extend({
     // Call _super for default behavior
     this._super(controller, model);
     // Implement your custom setup after
-    //this.controllerFor('application').set('event', "new");
-    controller.set('model', model);
-    controller.set('events', model);
-    controller.set('events.new', true);
-    controller.set('eventTitle', this.get('eventTitle'));
-    controller.set('eventDescription', this.get('eventDescription'));
-    controller.set('eventCreator', this.get('eventCreator'));
-    controller.set('allowNotifications', this.get('allowNotifications'));
+    controller.setProperties(model);
+    this.controllerFor('application').set('event', {new: true, id:this.get('eventId')});
+    controller.set('eventHeading', this.get('eventHeading'));
+    controller.set('eventInstruction', this.get('eventInstruction'));
+    controller.set('participantList', this.get('participantList'));
   },
 
+
   submit(e){
-    Ember.Logger.debug("Submit New Event", e, this.get('model.events'));
+    Ember.Logger.debug("Submit New Event", e, this.get('model.event'));
       if (newEventForm.valid){
           let newEvent = new Event(event);
           newEvent.save()

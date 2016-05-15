@@ -99,7 +99,7 @@ export default Ember.Component.extend({
         let testDate = (!returnIndex)? day : day.date
         //Ember.Logger.debug('isActive', i, '\n----',testDate,'\n----' ,selectedDate.date );
         if ( moment(testDate).isSame(moment(selectedDate.date)) ){
-            Ember.Logger.debug('isActive', moment(selectedDate.date));
+            //Ember.Logger.debug('isActive', moment(selectedDate.date));
             return (returnIndex) ? i : true;
         }
     }

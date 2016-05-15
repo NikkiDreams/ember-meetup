@@ -1,29 +1,29 @@
 <div class="box">
-    <div class="box-title">{{eventTitle}}</div>
-    <div class="box-description">{{eventDescription}}</div>
+    <div class="box-title">{{eventHeading}}</div>
+    <div class="box-description">{{eventInstruction}}</div>
     <form autocomplete="off" name="newEventForm">
         <section class="box-section user-form">
-          {{user-form model=events}}
+          {{user-form model=model.event}}
         </section>
 
         <section class="box-section event-form">
-          {{event-form model=events}}
+          {{event-form model=model.event}}
         </section>
 
         <section class="box-section date-form">
-          {{date-picker model=events new=true}}
+          {{date-picker model=model.event new=true}}
         </section>
 
         <section class="box-section participants-form">
-          {{participants-form  model=events}}
+          {{participants-form  model=model.event participantList=participantList}}
         </section>
 
         <section class="box-section settings-form">
-          {{settings-form  model=events new=true}}
+          {{settings-form  model=model.event new=true}}
         </section>
 
         <div class="box-controls box-bottom-sticky">
-            <button type="button" class="btn" disabled="{{v-get model 'isInvalid'}}" {{action 'submit' this}}>Create Event</button>
+            <button type="button" class="btn" disabled="{{v-get model.event 'isInvalid'}}" {{action 'submit' this}}>Create Event</button>
         </div>
     </form>
 

@@ -14,7 +14,8 @@
     <div class="form-row">
         <div class="form-group optional">
             <label for="description" ></label>
-            <textarea id="description" name="description" ng-model="event.description" placeholder="Enter Description..." class="form-control extend"></textarea>
+            {{textarea name="description" placeholder="Enter Description..."
+                  class="form-control extend" value=model.description}}
         </div>
     </div>
 </div>

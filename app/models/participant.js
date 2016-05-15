@@ -9,6 +9,7 @@ const {
 } = DS;
 
 export default Model.extend({
+  name : attr('string'),
   email : attr('string'),
-  votes: hasMany('vote')
+  votes: belongsTo('votes')
 });

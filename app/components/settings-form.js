@@ -35,6 +35,7 @@ export default Ember.Component.extend({
 
   notificationsDidChange(){
     let status = this.get('model.creator.isNotified');
+    Ember.Logger.debug('message', status);
     //on
     if(status){
       let modal = new ConfirmModal({
@@ -71,22 +72,22 @@ export default Ember.Component.extend({
 
   actions:{
     setEventStatus(isToggled, toggleName) {
-      //Ember.Logger.debug("statusDidChange",isToggled, toggleName);
+      Ember.Logger.debug("statusDidChange",isToggled, toggleName);
       switch(toggleName) {
         case 'eventStatus': {
-          this.toggleProperty('model.isClosed');
+          this.toggleProperty('isClosed');
           this.statusDidChange();
           break;
         }
 
         case 'eventNotifications': {
-          this.toggleProperty('model.creator.isNotified');
+          this.toggleProperty('isNotified');
           this.notificationsDidChange();
           break;
         }
 
         case 'eventDelete': {
-          this.toggleProperty('model.isDeleted');
+          this.toggleProperty('isDeleted');
           this.deleteEvent();
           break;
         }

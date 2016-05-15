@@ -19,7 +19,7 @@ let Validations = buildValidations({
     validators:[
       validator('presence', true),
       validator('format', { type: 'email' }),
-      validator('length', { min: 5 })
+      validator('length', { min: 6 })
     ]
   }
 });
@@ -28,5 +28,5 @@ export default Model.extend(Validations,{
   name :  attr('string'),
   email :  attr('string'),
   isVerified : attr('boolean', {defaultValue : false}),
-  allowNotifications : attr('boolean', {defaultValue : true})
+  allowNotifications : attr('boolean', {defaultValue : false})
 });
