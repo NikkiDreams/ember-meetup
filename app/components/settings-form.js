@@ -1,88 +1,86 @@
 import Ember from 'ember';
 
-const  ConfirmModal = function(options){
-  return;//console.log(options);
-};
-
 export default Ember.Component.extend({
+  tagName: 'div',
+  elementId: 'settingsForm',
+  classNames: 'settingsForm',
   event: null,
-  isClosed: false,
+  isClosed: true,
   isDeleted: false,
-  isNotified: false,
-  toggled: false,
+  isNotified: true,
+  isShowingModal: false,
 
-
-  statusDidChange(){
-    //Ember.Logger.debug("statusDidChange",this.get('model.isClosed'));
-    let status = this.get('model.isClosed');
+  statusDidChange(status){
+    this.toggleProperty('isClosed');
     //open
     if(status){
-      let modal = new ConfirmModal({
-        title : 'Event Open',
-        message : 'Participants can vote and comment on this event.',
-        cancelText : 'OK'
-      });
+      this.toggleProperty('isShowingModal');
+      Ember.Logger.debug("statusDidChange:",status);
     }
     //close
-    else if(status){
-      let modal = new ConfirmModal({
-          title : 'Event Closed',
-          message : 'Participants cannot vote or comment on this event.',
-          cancelText : 'OK'
-      });
+    else if(!status){
+      this.toggleProperty('isShowingModal');
+      Ember.Logger.debug("statusDidChange:",status);
+      /*
+        message : 'Participants cannot vote or comment on this event.',
+      */
     }
   },
 
-  notificationsDidChange(){
-    let status = this.get('model.creator.isNotified');
-    Ember.Logger.debug('message', status);
+  notificationsDidChange(status){
+      this.toggleProperty('isNotified');
     //on
     if(status){
-      let modal = new ConfirmModal({
-          title : 'Notifications On',
-          message : 'Event participants will receive email notifications for this event.',
-          cancelText : 'OK'
-      });
+      this.toggleProperty('isShowingModal');
+      Ember.Logger.debug("notificationsDidChange:",status);
+      /*
+        title : 'Notifications On',
+        message : 'Event participants will receive email notifications for this event.',
+      */
     }
     //off
-    else if(status){
-      let modal = new ConfirmModal({
-          title : 'Notifications Off',
-          message : 'Event participants will not receive email notifications for this event.',
-          cancelText : 'OK'
-      });
+    else if(!status){
+      this.toggleProperty('isShowingModal');
+      Ember.Logger.debug("notificationsDidChange:",status);
+      /*
+        title : 'Notifications Off',
+        message : 'Event participants will not receive email notifications for this event.',
+      */
     }
   },
 
   deleteEvent(){
-    let status = this.get('model.isDeleted');
-    let modal = new ConfirmModal({
+    this.toggleProperty('isShowingModal');
+    Ember.Logger.debug("deleteEvent");
+    /*
         title : 'Are you sure?',
         message : 'The event will no longer be accessible after it is deleted. Are you sure you want to continue?',
         isDestructive : true,
-        confirmText : 'Yes - delete',
-        cancelText : 'Cancel',
         confirm(){
             Event.delete({'id' : scope.event._id}, (e) =>{
                 event.isDeleted = true;
             });
         }
     });
+    */
   },
 
   actions:{
-    setEventStatus(isToggled, toggleName) {
-      Ember.Logger.debug("statusDidChange",isToggled, toggleName);
-      switch(toggleName) {
+    setEventStatus(hash) {
+      let obj = hash.context,
+          sName = obj.get('name'),
+          sValue = obj.get('value');
+      Ember.Logger.debug("setEventStatus", sName,sValue);
+      switch(sName) {
         case 'eventStatus': {
-          this.toggleProperty('isClosed');
-          this.statusDidChange();
+          Ember.Logger.debug("setEventStatus", sName, sValue);
+          this.statusDidChange(sValue);
           break;
         }
 
         case 'eventNotifications': {
-          this.toggleProperty('isNotified');
-          this.notificationsDidChange();
+          Ember.Logger.debug("statusNotificationsChange", sName, sValue);
+          this.notificationsDidChange(sValue);
           break;
         }
 
@@ -96,6 +94,21 @@ export default Ember.Component.extend({
           // any other type..
         }
       }
+    },
+
+    toggleModal() {
+      this.toggleProperty('isShowingModal');
+      console.log('toggleModal',this.get('isShowingModal'));
+    },
+
+    close() {
+      this.toggleProperty('isShowingModal', false);
+      console.log('close',this.get('isShowingModal'));
+    },
+
+    confirmModal(){
+      this.toggleProperty('isConfirmed');
+      console.log('confirmModal',this.get('isConfirmed'));
     }
   }
 

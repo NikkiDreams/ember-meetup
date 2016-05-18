@@ -1,0 +1,12 @@
+<div class="rl-modal-position">
+  <div class="rl-modal">
+    <div class="rl-modal-title">{{title}}</div>
+    <div class="rl-modal-message">
+        {{messageBefore}}{{yield}}{{messageAfter}}
+    </div>
+    <div class="rl-modal-actions">
+        <button type="button" class="btn {{isDestructive}}" {{action 'setEventStatus'}}>OK</button>
+        <button type="button" class="btn" {{action 'closeModal'}}>Cancel</button>
+    </div>
+  </div>
+</div>

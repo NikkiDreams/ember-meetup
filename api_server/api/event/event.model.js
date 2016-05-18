@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var debug = require('debug')('rallly');
+var debug = require('debug')('ember-meetup');
 var shortid = require('shortid');
 
 var EventSchema = new Schema({

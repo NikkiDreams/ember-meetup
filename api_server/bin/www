@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var debug = require('debug')('rallly');
+var debug = require('debug')('ember-meetup');
 var app = require('../app');
 
 // Server is restricted to listen to localhost (127.0.0.1)

@@ -1,6 +1,6 @@
 var express = require('express');
 var Event = require('./event.model');
-var debug = require('debug')('rallly');
+var debug = require('debug')('ember-meetup');
 var communicator = require('../../communicator');
 
 var getRandomString = function(){

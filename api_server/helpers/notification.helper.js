@@ -4,13 +4,13 @@
 
 var app = require('../app');
 var communicator = require('../communicator');
-var debug = require('debug')('rallly');
+var debug = require('debug')('ember-meetup');
 var sendgrid = require('sendgrid')(app.get('sendGridAPIKey'));
 
 var getEmail = function(options) {
   var email =  new sendgrid.Email({
-    from : 'noreply@rallly.co',
-    fromname : 'Rallly'
+    from : 'noreply@Ember-Meetup.co',
+    fromname : 'Ember-Meetup'
   });
   email.addTo(options.to);
   email.setSubject(options.subject);
@@ -54,7 +54,7 @@ communicator.on('comment:add', function(event, comment){
 var sendEmailConfirmation = function(event){
     var email = getEmail({
       to: event.creator.email,
-      subject:  'Rallly: ' + event.title + ' - Verify Email Address',
+      subject:  'Ember-Meetup: ' + event.title + ' - Verify Email Address',
       title:    'Your event ' + event.title + ' has been created successfully.',
       buttonText: 'Verify Email Address',
       buttonURL:  app.get('absoluteUrl')('verify/'+event._id+'/code/'+event.__private.verificationCode),
@@ -71,11 +71,11 @@ var sendInvites = function(event){
     event.emails.forEach(function(item) {
       var email = getEmail({
         to:         item.email,
-        subject:    'Rallly: ' + event.title,
+        subject:    'Ember-Meetup: ' + event.title,
         title:      event.creator.name + ' has invited you to participate in their event: ' + event.title,
         buttonText: 'View Event',
         buttonURL:  app.get('absoluteUrl')(event._id),
-        message:    'Rallly is a free collaborative scheduling service that lets you and your friends vote on a date to host an event. ' +
+        message:    'Ember-Meetup is a free collaborative scheduling service that lets you and your friends vote on a date to host an event. ' +
                     'Click on the button below to visit the event page and vote on the dates that best suit you.'
       });
       email.replyto = event.creator.email;
@@ -87,7 +87,7 @@ var sendInvites = function(event){
 var verifyEmail = function(event){
     var email = getEmail({
       to: event.creator.email,
-      subject: 'Rallly: ' + event.title + ' - Verify Email Address',
+      subject: 'Ember-Meetup: ' + event.title + ' - Verify Email Address',
       title: 'Please verify your email address to receive updates from this event.',
       buttonText: 'Verify Email Address',
       buttonURL: app.get('absoluteUrl')('verify/'+event._id+'/code/'+event.__private.verificationCode),
@@ -101,7 +101,7 @@ var verifyEmail = function(event){
 var sendNewParticipantNotification = function(event, participant){
     var email = getEmail({
       to: event.creator.email,
-      subject: 'Rallly: ' + event.title + ' - New Partcipant',
+      subject: 'Ember-Meetup: ' + event.title + ' - New Partcipant',
       title: participant.name + ' has voted!',
       buttonText: 'View Event',
       buttonURL: app.get('absoluteUrl')(event._id),
@@ -115,7 +115,7 @@ var sendNewParticipantNotification = function(event, participant){
 var sendNewCommentNotification = function(event, comment){
     var email = getEmail({
       to: event.creator.email,
-      subject: 'Rallly: ' + event.title + ' - New Comment',
+      subject: 'Ember-Meetup: ' + event.title + ' - New Comment',
       title: comment.author.name + ' has commented on your event!',
       buttonText: 'View Event',
       buttonURL: app.get('absoluteUrl')(event._id),

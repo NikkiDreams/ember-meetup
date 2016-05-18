@@ -12,8 +12,8 @@
             </div>
         </div>
         <div class="switch">
-            {{x-toggle theme='flip' size='small' toggle='setEventStatus' value=model.isClosed
-                name='eventStatus' onLabel='Open' offLabel='Closed'}}
+            {{x-toggle theme='flip' size='small' value=isClosed toggled=isClosed
+                name='eventStatus' onLabel='Open::open' offLabel='Closed::closed' onToggle=(action 'setEventStatus')}}
         </div>
     </div>
     <div class="switch-row">
@@ -26,8 +26,8 @@
             </div>
         </div>
         <div class="switch">
-            {{x-toggle theme='flip' size='small' toggle='setEventStatus' value=model.creator.isNotified
-                name='eventNotifications'}}
+            {{x-toggle theme='flip' size='small' value=isNotified toggled=isNotified
+                name='eventNotifications' onToggle=(action 'setEventStatus')}}
         </div>
     </div>
     {{#unless new}}
@@ -48,4 +48,18 @@
     </div>
     {{/unless}}
 </div>
-{{yield}}
+
+
+{{#if isShowingModal}}
+  {{#modal-dialog
+            title='Poll Open'
+            close='close'
+            clickOutsideToClose=true
+            translucentOverlay=true
+            targetAttachment='middle center'
+            overlay-class='modal-overlays'
+            container-class='rl-modal'
+            wrapper-class='rl-modal-wrapper'}}
+    <h3>Participants can vote and comment on this event.</h3>
+  {{/modal-dialog}}
+{{/if}}

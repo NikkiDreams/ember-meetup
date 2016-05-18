@@ -14,6 +14,8 @@ export default Ember.Route.extend({
   moment: Ember.inject.service(),
   store: Ember.inject.service(),
 
+  isShowingModal: false,
+
   eventId: uuid(),
 
   eventHeading : "Schedule a New Event",
@@ -51,6 +53,7 @@ export default Ember.Route.extend({
       //participants: [this.store.createRecord('participant')],
       isClosed: false,
       isDeleted: false,
+      isNotified: true
       //__private: this.store.createRecord('code')
     });
   },
@@ -96,6 +99,10 @@ export default Ember.Route.extend({
   actions:{
     submit(e){
       this.submit(e);
+    },
+
+    toggleModal() {
+      this.toggleProperty('isShowingModal');
     }
   }
 

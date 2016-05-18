@@ -3,7 +3,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var debug = require('debug')('rallly');
+var debug = require('debug')('ember-meetup');
 var mongoose = require('mongoose');
 
 var app = module.exports = express();

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var controller = require('./event.controller');
-var debug = require('debug')('rallly');
+var debug = require('debug')('ember-meetup');
 /* GET home page. */
 
 var after = function(req, res) {
