@@ -5,7 +5,25 @@
     <div class="form-row">
         <div class="form-group optional">
             <label>Participant's Emails</label>
-            {{input type='text' id="participant_emails" value=participantList class="tags-input contacts selectized"}}
+            {{ember-selectize
+                  id="participant_emails"
+                  class="tags-input contacts selectized"
+                  content=participantList
+                  options=participantList
+                  optionValuePath="content.email"
+                  optionLabelPath="content.email"
+                  searchField='name, email'
+                  selection=[selectionList]
+                  plugins='restore_on_backspace, remove_button'
+                  multiple=true
+                  required=true
+                  persist=false
+                  maxItems=null
+                  create-item=(action 'create' participantList)
+                  update-filter=(action 'createFilter' participantList)
+                  add-value='addItem'
+                  remove-value='removeItem'
+                  placeholder="Select Participants or Add Email Addresses" }}
         </div>
     </div>
 </div>

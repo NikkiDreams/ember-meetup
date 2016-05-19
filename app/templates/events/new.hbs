@@ -3,23 +3,23 @@
     <div class="box-description">{{eventInstruction}}</div>
     <form autocomplete="off" name="newEventForm">
         <section class="box-section user-form">
-          {{user-form model=model.event}}
+          {{user-form model=model new=true}}
         </section>
 
         <section class="box-section event-form">
-          {{event-form model=model.event}}
+          {{event-form model=model new=true}}
         </section>
 
         <section class="box-section date-form">
-          {{date-picker model=model.event new=true}}
+          {{date-picker model=model new=true}}
         </section>
 
         <section class="box-section participants-form">
-          {{participants-form  model=model.event participantList=participantList}}
+          {{participants-form  model=model participantList=participantList new=true}}
         </section>
 
         <section class="box-section settings-form">
-          {{settings-form  model=model.event new=true}}
+          {{settings-form  model=model new=true}}
         </section>
 
         <div class="box-controls box-bottom-sticky">

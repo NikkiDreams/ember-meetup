@@ -41,20 +41,20 @@ export default Ember.Route.extend({
 
   model(params) {
     return this.store.createRecord('event', {
-      id: this.get('eventId'),
-      description : '',
-      location: '',
-      title : '',
-      created : new Date(),
-      //updated : new Date(),
-      //comments : [this.store.createRecord('comment')],
-      //creator: this.store.createRecord('creator',{allowNotifications:true}),
-      //dates: [this.store.createRecord('date')],
-      //participants: [this.store.createRecord('participant')],
-      isClosed: false,
-      isDeleted: false,
-      isNotified: true
-      //__private: this.store.createRecord('code')
+      id:           this.get('eventId'),
+      description:  '5 Movez Workouts',
+      location:     'Online @ 5movez.com',
+      title:        'Access Workout',
+      created:      new Date(),
+      updated:      new Date(),
+      comments:     [/*this.store.createRecord('comment')*/],
+      creator:       this.store.createRecord('creator',{allowNotifications:true}),
+      dates:        [/*this.store.createRecord('date')*/],
+      participants: [/*this.store.createRecord('participant')*/],
+      isOpenPoll:   false,
+      isDeleted:    false,
+      isNotified:   true,
+      __private:    this.store.createRecord('code')
     });
   },
 
@@ -62,7 +62,8 @@ export default Ember.Route.extend({
     // Call _super for default behavior
     this._super(controller, model);
     // Implement your custom setup after
-    controller.setProperties(model);
+    //controller.setProperties(model);
+    controller.set("model", model);
     this.controllerFor('application').set('event', {new: true, id:this.get('eventId')});
     controller.set('eventHeading', this.get('eventHeading'));
     controller.set('eventInstruction', this.get('eventInstruction'));
@@ -82,11 +83,10 @@ export default Ember.Route.extend({
               //Communicator.trigger('add:event', event);
               this.get('state').go('newevent.success');
           }, () =>{
-              let modal = new ConfirmModal({
-                  title : 'Uh oh!',
-                  message : 'There was an error creating your event. Please try again later.',
-                  cancelText : 'OK'
-              });
+              /*
+                title : 'Uh oh!'
+                message : 'There was an error creating your event. Please try again later.'
+                */
           });
       } else {
           let notification = new Notification({

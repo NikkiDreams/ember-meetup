@@ -1,0 +1,6 @@
+let label = item.name || item.email;
+let caption = item.name ? item.email : null;
+<div>
+    <span class="label">{{#if (eq data.name '')}}{{data.email}}{{else}}{{data.name}}{{/if}}</span>
+    <span class="caption">{{if (eq data.name '') data.email}}</span>
+</div>

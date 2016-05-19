@@ -23,6 +23,10 @@ module.exports = function(environment) {
         modalRootElementId: 'modal-overlays'
       }
       */
+      'ember-cli-selectize': {
+        //valid values are `default`, `bootstrap2`, `bootstrap3` or false
+        'theme': 'bootstrap3'
+      }
 
     },
     moment: {

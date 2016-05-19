@@ -21,7 +21,8 @@ export default Model.extend({
       created : attr('date', { defaultValue() { return new Date(); } }),
       updated : attr('date'),
 
-      isClosed : attr('boolean', {defaultValue : false}),
+      isOpenPoll : attr('boolean', {defaultValue : false}),
+      isNotified : attr('boolean', {defaultValue : true}),
       isDeleted : attr('boolean', {defaultValue : false}),
       __private : belongsTo('code')
 });

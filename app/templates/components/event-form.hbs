@@ -4,16 +4,17 @@
 <div class="section-main">
     <div class="form-row">
         <div class="form-col">
-            {{!--log 'model:' model--}}
-            {{validated-input model=model valuePath='title' placeholder='Event Title' optional='optional'}}
+            {{validated-input model=model valuePath='title' value=model.title
+                placeholder='Event Title' optional='optional'}}
         </div>
         <div class="form-col">
-            {{validated-input model=model valuePath='location' placeholder='Event Location' optional='optional'}}
+            {{validated-input model=model valuePath='location' value=model.location
+                placeholder='Event Location' optional='optional'}}
         </div>
     </div>
     <div class="form-row">
         <div class="form-group optional">
-            <label for="description" ></label>
+            <label for="description"></label>
             {{textarea name="description" placeholder="Enter Description..."
                   class="form-control extend" value=model.description}}
         </div>

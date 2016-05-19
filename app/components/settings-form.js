@@ -5,64 +5,33 @@ export default Ember.Component.extend({
   elementId: 'settingsForm',
   classNames: 'settingsForm',
   event: null,
-  isClosed: true,
+  isOpenPoll: true,
   isDeleted: false,
   isNotified: true,
-  isShowingModal: false,
+  isDestructive : false,
+  isShowingPollModal: false,
+  isShowingNotifyModal: false,
+  isDeletedModal: false,
+
 
   statusDidChange(status){
-    this.toggleProperty('isClosed');
-    //open
-    if(status){
-      this.toggleProperty('isShowingModal');
-      Ember.Logger.debug("statusDidChange:",status);
-    }
-    //close
-    else if(!status){
-      this.toggleProperty('isShowingModal');
-      Ember.Logger.debug("statusDidChange:",status);
-      /*
-        message : 'Participants cannot vote or comment on this event.',
-      */
-    }
+    this.toggleProperty('isOpenPoll');
+    this.toggleProperty('isShowingPollModal');
+    Ember.Logger.debug("statusDidChange:",status);
   },
 
   notificationsDidChange(status){
       this.toggleProperty('isNotified');
-    //on
-    if(status){
-      this.toggleProperty('isShowingModal');
+      this.toggleProperty('isShowingNotifyModal');
       Ember.Logger.debug("notificationsDidChange:",status);
-      /*
-        title : 'Notifications On',
-        message : 'Event participants will receive email notifications for this event.',
-      */
-    }
-    //off
-    else if(!status){
-      this.toggleProperty('isShowingModal');
-      Ember.Logger.debug("notificationsDidChange:",status);
-      /*
-        title : 'Notifications Off',
-        message : 'Event participants will not receive email notifications for this event.',
-      */
-    }
   },
 
-  deleteEvent(){
-    this.toggleProperty('isShowingModal');
-    Ember.Logger.debug("deleteEvent");
-    /*
-        title : 'Are you sure?',
-        message : 'The event will no longer be accessible after it is deleted. Are you sure you want to continue?',
-        isDestructive : true,
-        confirm(){
-            Event.delete({'id' : scope.event._id}, (e) =>{
-                event.isDeleted = true;
-            });
-        }
-    });
-    */
+  deleteEvent(destroy){
+    this.toggleProperty('isDeletedModal');
+    if(destroy){
+      this.toggleProperty('isDeleted');
+      Ember.Logger.debug("deleteEvent");
+    }
   },
 
   actions:{
@@ -85,30 +54,26 @@ export default Ember.Component.extend({
         }
 
         case 'eventDelete': {
-          this.toggleProperty('isDeleted');
-          this.deleteEvent();
+          this.deleteEvent(false);
+          break;
+        }
+
+        case 'eventDestroy': {
+          this.deleteEvent(true);
           break;
         }
 
         default: {
-          // any other type..
+          return;
         }
       }
     },
 
-    toggleModal() {
-      this.toggleProperty('isShowingModal');
-      console.log('toggleModal',this.get('isShowingModal'));
-    },
-
     close() {
-      this.toggleProperty('isShowingModal', false);
+      this.toggleProperty('isShowingPollModal', false);
+      this.toggleProperty('isShowingNotifyModal', false);
+      this.toggleProperty('isDeletedModal', false);
       console.log('close',this.get('isShowingModal'));
-    },
-
-    confirmModal(){
-      this.toggleProperty('isConfirmed');
-      console.log('confirmModal',this.get('isConfirmed'));
     }
   }
 

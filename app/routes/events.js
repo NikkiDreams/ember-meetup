@@ -12,7 +12,7 @@ export default Ember.Route.extend({
   title: null,
   eventUrl: null,
   absolute: false,
-  isClosed: false,
+  isOpenPoll: false,
   params: null,
 
   model(params){

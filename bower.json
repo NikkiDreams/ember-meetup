@@ -7,7 +7,7 @@
     "ember-qunit-notifications": "0.1.0",
     "DateJS": "datejs#^1.0.0-rc3",
     "skrollr": "^0.6.30",
-    "selectize": "^0.12.1",
+    "selectize": "miguelcobain/selectize.js#master",
     "node-uuid": "1.4.1"
   }
 }
