@@ -13,32 +13,47 @@ export default Ember.Component.extend({
   emailRegexString: '^([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})?$',
   emailRegex: new RegExp(this.emailRegexString),
 
+  // Methods
+  capitalizeSuggestion(term) {
+    return `Hey! Perhaps you want to create ${term.toUpperCase()}??`;
+  },
+
   createFilter(obj, input) {
       let regex = new RegExp('^' + REGEX_EMAIL + '$', 'i'),
           match = input.match(regex),
-          select = Ember.$(this.selectControl);
+          select = Ember.$('#participant_emails');
 
       // format = email@address.com
       if (match) {
-        Ember.Logger.debug('message',input, match, select);
-        return !select.options.hasOwnProperty(match[0]);
+        //Ember.Logger.debug('message',input, match[0], select[0].options);
+        return !select[0].options.hasOwnProperty(match[0].toString());
       }
 
       // format =  name <email@address.com>
-      regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+      regex = new RegExp('^([^<]*)\<' + this.emailRegexString + '\>$', 'i');
       match = input.match(regex);
       if (match) {
-        Ember.Logger.debug('message',match[2]);
-        return !select.options.hasOwnProperty(match[2]);
+        //Ember.Logger.debug('message',match[2],select[0].options);
+        return !select[0].options.hasOwnProperty(match[2]);
       }
 
       return false;
   },
 
-  create(input) {
+  create(contact) {
+    Ember.Logger.debug('INPUT', contact);
+
+    let newContact = { name: contact, email: contact };
+          this.get('controller').get('participantList').pushObject(newContact);
+          this.get('controller').set('selectionList', newContact);
+
+          return this.get('participantList');
+    /*
       if ((new RegExp('^' + REGEX_EMAIL + '$', 'i')).test(input)) {
+          console.log(Ember.$()[0].selectize);
           return {email: input};
       }
+
       let match = input.match(new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i'));
       if (match) {
           return {
@@ -48,16 +63,7 @@ export default Ember.Component.extend({
       }
       console.log('Invalid email address.');
       return false;
-  },
-
-  addItem(value, $item){
-    console.log("onItemAdd",value, $item);
-    this.updateParticipantsStore(value);
-  },
-
-  removeItem(value){
-    console.log("onItemRemove",value);
-    this.removeParticipantFromStore(value);
+      */
   },
 
   removeParticipantFromStore(email){
@@ -83,23 +89,19 @@ export default Ember.Component.extend({
 
   actions: {
     create(val){
-      console.log("create",val);
+      console.log("create");
       this.create(val);
+
     },
 
     createFilter(obj,val){
-      console.log("createFilter",obj, val);
-      this.createFilter(obj,val);
+      console.log("createFilter",this.createFilter(obj,val));
+
     },
 
-    addItem(val){
-      console.log("addItem",val);
-      this.addItem(val);
-    },
-
-    removeItem(val){
-      console.log("removeItem",val);
-      this.removeItem(val);
+    hideCreateOptionOnSameName(term) {
+      let existingOption = this.get('participantList').findBy('email', term);
+      return !existingOption;
     }
   }
 

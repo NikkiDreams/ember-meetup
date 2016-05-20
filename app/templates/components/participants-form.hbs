@@ -5,25 +5,27 @@
     <div class="form-row">
         <div class="form-group optional">
             <label>Participant's Emails</label>
-            {{ember-selectize
+            {{#power-select-multiple-create
                   id="participant_emails"
                   class="tags-input contacts selectized"
-                  content=participantList
+                  placeholder="Select Participants or Add Email Addresses"
+                  noMatchesMessage="No pre-populted contacts are available."
+                  searchPlaceholder="Type your an email address"
+                  searchField="email"
                   options=participantList
-                  optionValuePath="content.email"
-                  optionLabelPath="content.email"
-                  searchField='name, email'
-                  selection=[selectionList]
-                  plugins='restore_on_backspace, remove_button'
-                  multiple=true
-                  required=true
-                  persist=false
-                  maxItems=null
-                  create-item=(action 'create' participantList)
-                  update-filter=(action 'createFilter' participantList)
-                  add-value='addItem'
-                  remove-value='removeItem'
-                  placeholder="Select Participants or Add Email Addresses" }}
+                  selected=selectionList
+                  onchange=(action (mut selectionList))
+                  showCreateWhen=(action "hideCreateOptionOnSameName")
+                  buildSuggestion=capitalizeSuggestion
+                  as |contact term|}}
+              {{!-- log 'contact' contact --}}
+                {{#if (eq contact.name '') }}
+                  {{contact.email}}
+                {{else}}
+                  {{contact.name}} [{{contact.email}}]
+                {{/if}}
+            {{/power-select-multiple-create}}
+            {{!-- log 'selectionList' selectionList participantList --}}
         </div>
     </div>
 </div>

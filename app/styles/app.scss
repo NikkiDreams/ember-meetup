@@ -5,6 +5,7 @@ $gutter: golden-ratio(4em, 1) !default;
 @import "modules/vars";
 @import "modules/mixins";
 @import "partials/normalize";
+@import "ember-power-select";
 
 body {
     font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;

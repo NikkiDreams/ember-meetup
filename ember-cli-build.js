@@ -32,14 +32,6 @@ module.exports = function(defaults) {
     type: 'vendor',
     prepend: false
   });
-  app.import('bower_components/selectize/dist/js/standalone/selectize.js', {
-    type: 'vendor',
-    prepend: false
-  });
-  app.import('bower_components/selectize/dist/css/selectize.css', {
-    type: 'vendor',
-    prepend: false
-  });
 
   return app.toTree();
 };

@@ -1,0 +1,106 @@
+{{#if (hasBlock "inverse")}}
+  {{#power-select-multiple
+      afterOptionsComponent=afterOptionsComponent
+      allowClear=allowClear
+      ariaDescribedBy=ariaDescribedBy
+      ariaInvalid=ariaInvalid
+      ariaLabel=ariaLabel
+      ariaLabelledBy=ariaLabelledBy
+      beforeOptionsComponent=beforeOptionsComponent
+      buildSelection=buildSelection
+      class=class
+      closeOnSelect=closeOnSelect
+      destination=destination
+      dir=dir
+      disabled=disabled
+      dropdownClass=dropdownClass
+      extra=extra
+      horizontalPosition=horizontalPosition
+      initiallyOpened=initiallyOpened
+      loadingMessage=loadingMessage
+      matcher=matcher
+      matchTriggerWidth=matchTriggerWidth
+      noMatchesMessage=noMatchesMessage
+      onchange=(action "selectOrCreate")
+      onclose=onclose
+      onfocus=onfocus
+      oninput=oninput
+      onkeydown=onkeydown
+      onopen=onopen
+      options=optionsArray
+      optionsComponent=optionsComponent
+      placeholder=placeholder
+      renderInPlace=renderInPlace
+      required=required
+      search=(action "searchAndSuggest")
+      searchEnabled=searchEnabled
+      searchField=searchField
+      searchMessage=searchMessage
+      searchPlaceholder=searchPlaceholder
+      selected=selected
+      selectedItemComponent=selectedItemComponent
+      tabindex=tabindex
+      triggerClass=concatenatedTriggerClass
+      triggerComponent=triggerComponent
+      verticalPosition=verticalPosition
+      as |option term|}}
+      {{#if option.__isSuggestion__}}
+        {{option.text}}
+      {{else}}
+        {{yield to="inverse"}}
+      {{/if}}
+    {{else}}
+  {{/power-select-multiple}}
+{{else}}
+  {{#power-select-multiple
+      afterOptionsComponent=afterOptionsComponent
+      allowClear=allowClear
+      ariaDescribedBy=ariaDescribedBy
+      ariaInvalid=ariaInvalid
+      ariaLabel=ariaLabel
+      ariaLabelledBy=ariaLabelledBy
+      beforeOptionsComponent=beforeOptionsComponent
+      buildSelection=buildSelection
+      class=class
+      closeOnSelect=closeOnSelect
+      destination=destination
+      dir=dir
+      disabled=disabled
+      dropdownClass=dropdownClass
+      extra=extra
+      horizontalPosition=horizontalPosition
+      initiallyOpened=initiallyOpened
+      loadingMessage=loadingMessage
+      matcher=matcher
+      matchTriggerWidth=matchTriggerWidth
+      noMatchesMessage=noMatchesMessage
+      onchange=(action "selectOrCreate")
+      onclose=onclose
+      onfocus=onfocus
+      oninput=oninput
+      onkeydown=onkeydown
+      onopen=onopen
+      options=optionsArray
+      optionsComponent=optionsComponent
+      placeholder=placeholder
+      renderInPlace=renderInPlace
+      required=required
+      search=(action "searchAndSuggest")
+      searchEnabled=searchEnabled
+      searchField=searchField
+      searchMessage=searchMessage
+      searchPlaceholder=searchPlaceholder
+      selected=selected
+      selectedItemComponent=selectedItemComponent
+      tabindex=tabindex
+      triggerClass=concatenatedTriggerClass
+      triggerComponent=triggerComponent
+      verticalPosition=verticalPosition
+      as |option term|}}
+      {{#if option.__isSuggestion__}}
+        {{option.text}}
+      {{else}}
+        {{yield option term}}
+      {{/if}}
+  {{/power-select-multiple}}
+{{/if}}
