@@ -10,18 +10,6 @@ var EventSchema = new Schema({
       default: shortid.generate
     },
     description : String,
-    creator : {
-        name : String,
-        email : String,
-        isVerified : {
-            type : Boolean,
-            default : false
-        },
-        allowNotifications : {
-            type : Boolean,
-            default : true
-        }
-    },
     created : {
         type : Date,
         default : Date.now
@@ -29,9 +17,28 @@ var EventSchema = new Schema({
     updated : Date,
     title : String,
     dates : [Date],
-    emails : [{
-        email : String
-    }],
+    allowNotifications : {
+        type : Boolean,
+        default : true
+    },
+    location: String,
+    isOpen : {
+        type : Boolean,
+        default : false
+    },
+    isDeleted : {
+        type : Boolean,
+        default : false
+    },
+
+    creator : {
+        name : String,
+        email : String,
+        isVerified : {
+            type : Boolean,
+            default : false
+        }
+    },
     comments : [{
         id : Schema.Types.ObjectId,
         author : {
@@ -43,24 +50,13 @@ var EventSchema = new Schema({
             default : Date.now
         }
     }],
-    location: String,
     participants : [{
         id : Schema.Types.ObjectId,
         name : String,
+        email : String,
         votes : [Boolean]
     }],
-    isClosed : {
-        type : Boolean,
-        default : false
-    },
-    isDeleted : {
-        type : Boolean,
-        default : false
-    },
-    isExample : {
-        type : Boolean,
-        default : false
-    },
+
     __private : {
         verificationCode : String,
         unsubscribeCode : String

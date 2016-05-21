@@ -3,9 +3,9 @@ import config from '../config/environment';
 
 export default JSONAPIAdapter.extend({
   //authorizer:             'authorizer:oauth2',
-  namespace:              config.apiNamespace || 'api/v1',
-  host:                   config.apiHost || 'https://api.5movez.com',
-  useCSRF:                true,
+  namespace:              config.apiNamespace || 'api',
+  host:                   config.apiHost || 'http://localhost:3000',
+  useCSRF:                false,
   coalesceFindRequests:   true
   /*,
   headers:                Ember.computed('session.data.authenticated.data.token', function() {

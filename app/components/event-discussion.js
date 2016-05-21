@@ -4,12 +4,13 @@ export default Ember.Component.extend({
 
 
           controllerAs : 'discussionCtrl',
-          controller($scope, $rootScope, $timeout, Comment, ConfirmModal, Communicator){
-              $scope.comment = { author : {}, comment : '' };
-              $rootScope.$on('add:participant', (e, event, participant) =>{
-                  $scope.comment.author.name = participant.name;
+          controller($rootScope, $timeout, Comment, ConfirmModal, Communicator){
+              comment = { author : {}, comment : '' };
+              $root$on('add:participant', (e, event, participant) =>{
+                  comment.author.name = participant.name;
               });
               this.deleteComment = (comment) =>{
+                /*
                   let modal = new ConfirmModal({
                       title : 'Are you sure?',
                       message : 'Are you sure you want to remove this comment?',
@@ -17,31 +18,34 @@ export default Ember.Component.extend({
                       cancelText : 'No - nevermind',
                       isDestructive : true,
                       confirm (){
-                          Comment.remove({ id : $scope.event._id , cid : comment._id }, (event) =>{
-                              $scope.event = event;
+                          Comment.remove({ id : event._id , cid : comment._id }, (event) =>{
+                              event = event;
                           });
                       }
                   });
+                  */
               };
               this.postComment = () =>{
-                  if ($scope.commentForm.$valid){
-                      let comment = new Comment($scope.comment);
-                      comment.$save({id:$scope.event._id}, (event) =>{
-                          $scope.event = event;
-                          Communicator.trigger('add:comment', event, $scope.comment);
-                          $scope.comment.content = '';
-                          $timeout($scope.scrollToBottom);
+                  if (commentForm.$valid){
+                    /*
+                      let comment = new Comment(comment);
+                      comment.$save({id:event._id}, (event) =>{
+                          event = event;
+                          Communicator.trigger('add:comment', event, comment);
+                          comment.content = '';
+                          $timeout(scrollToBottom);
                       });
-                      $scope.commentForm.$setPristine();
+                      commentForm.$setPristine();
+                      */
                   }
               };
-              $scope.scrollToBottom = () =>{
-                  let thread = angular.element('.comment-thread');
+              scrollToBottom = () =>{
+                  let thread = element('.comment-thread');
                   thread.scrollTop(thread.prop('scrollHeight'));
               };
           },
           link(scope, el, attrs){
-              $timeout(scope.scrollToBottom);
+              //$timeout(scrollToBottom);
           }
 
 

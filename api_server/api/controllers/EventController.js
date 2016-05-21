@@ -1,7 +1,7 @@
 var express = require('express');
-var Event = require('./event.model');
+var Event = require('../models/all-models');
 var debug = require('debug')('ember-meetup');
-var communicator = require('../../communicator');
+var communicator = require('../../lib/communicator');
 
 var getRandomString = function(){
     return require('crypto').randomBytes(16).toString('hex');

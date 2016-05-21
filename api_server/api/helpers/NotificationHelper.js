@@ -2,8 +2,8 @@
     Email Notifications Helper Class
 */
 
-var app = require('../app');
-var communicator = require('../communicator');
+var app = require('../../app');
+var communicator = require('../../lib/communicator');
 var debug = require('debug')('ember-meetup');
 var sendgrid = require('sendgrid')(app.get('sendGridAPIKey'));
 

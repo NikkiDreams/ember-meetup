@@ -54,7 +54,7 @@ export default Ember.Route.extend({
       isOpenPoll:   false,
       isDeleted:    false,
       isNotified:   true,
-      __private:    this.store.createRecord('code')
+      __private:    [/*this.store.createRecord('code')*/]
     });
   },
 
@@ -72,28 +72,15 @@ export default Ember.Route.extend({
 
 
   submit(e){
-    Ember.Logger.debug("Submit New Event", e, this.get('model.event'));
-      if (newEventForm.valid){
-          let newEvent = new Event(event);
-          newEvent.save()
-          .then(function(event){
-              this.set('event', event);
-              this.get('event._id');
-
-              //Communicator.trigger('add:event', event);
-              this.get('state').go('newevent.success');
-          }, () =>{
-              /*
-                title : 'Uh oh!'
-                message : 'There was an error creating your event. Please try again later.'
-                */
-          });
-      } else {
-          let notification = new Notification({
-              title : 'Hold on!',
-              message : 'Make sure you fill in all the required fields and that your data is correct.'
-          });
-      }
+    //Ember.Logger.debug("Submit New Event", this.controllerFor('events.new').get('model'));
+      this.controllerFor('events.new').get('model')
+        .save().then((result) => {
+          // Success callback
+          Ember.Logger.error('SAVE SUCCESS', result);
+        }, (err) =>{
+          // Error callback
+          Ember.Logger.error('SAVE FAILED', err);
+        });
   },
 
   actions:{

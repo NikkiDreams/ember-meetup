@@ -1,5 +1,5 @@
 import JSONAPISerializer from 'ember-data/serializers/json-api';
-import EmbeddedRecordsMixin from 'ember-data/EmbeddedRecordsMixin';
+import EmbeddedRecordsMixin from 'ember-data';
 
 export default JSONAPISerializer.extend(EmbeddedRecordsMixin,{
   attrs: {

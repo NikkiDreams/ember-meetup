@@ -1,10 +1,16 @@
 import Ember from 'ember';
 import {uuid} from 'ember-cli-uuid';
+import moment from 'moment';
+const {
+  Component,
+  computed,
+  getOwner
+} = Ember;
 
 const REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
               '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
 
-export default Ember.Component.extend({
+export default Component.extend({
   store: Ember.inject.service(),
 
   selectControl: '#participant_emails',
@@ -12,6 +18,26 @@ export default Ember.Component.extend({
 
   emailRegexString: '^([\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4})?$',
   emailRegex: new RegExp(this.emailRegexString),
+
+
+  selectionsListDidChange: Ember.observer('selectionList', (list) =>{
+    //console.log(_that.selectionList);
+    Ember.run(list, 'updateParticipants');
+    //this.get('controller').set('selectionList', newContact);
+  }),
+
+  updateParticipants(){
+    let list = this.get('selectionList'),
+        applicationInstance = getOwner(this),
+        store = applicationInstance.lookup('service:store');
+        store.unloadAll('participant');
+    list.forEach((contact, index) => {
+      contact['id'] = uuid();
+      console.log('participant', contact, store);
+      store.createRecord('participant', contact);
+    });
+    return list;
+  },
 
   // Methods
   capitalizeSuggestion(term) {

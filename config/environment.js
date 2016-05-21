@@ -7,7 +7,7 @@ module.exports = function(environment) {
     baseURL: '/',
     locationType: 'auto',
     apiNamespace: "",
-    apiHost: "http://localhost:3000/",
+    apiHost: "http://localhost:3000",
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -23,10 +23,6 @@ module.exports = function(environment) {
         modalRootElementId: 'modal-overlays'
       }
       */
-      'ember-cli-selectize': {
-        //valid values are `default`, `bootstrap2`, `bootstrap3` or false
-        'theme': 'bootstrap3'
-      }
 
     },
     moment: {

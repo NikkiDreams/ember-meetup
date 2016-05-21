@@ -3,14 +3,13 @@ import moment from 'moment';
 
 const {
   Component,
-  computed,
   inject,
-  set,
-  get
+  set
 } = Ember;
 
-export default Ember.Component.extend({
-  moment: Ember.inject.service(),
+export default Component.extend({
+  moment: inject.service(),
+  store: inject.service(),
 
   tagName: 'div',
   className: 'date-picker',
@@ -23,7 +22,6 @@ export default Ember.Component.extend({
 
   eventDays: Ember.A([]),
   selectedDates: Ember.A([]),
-  isActive: false,
 
   init() {
     this._super(...arguments);
@@ -76,14 +74,14 @@ export default Ember.Component.extend({
       if ( activeIndex !== -1 ) {
           // Already selected
           set(dayObj, 'isActive', false);
-          this.get('selectedDates').removeAt(activeIndex, 1) // remove
+          this.get('selectedDates').removeAt(activeIndex, 1); // remove
       } else {
           // Not selected
           let index = 0,
               inserted = false;
           do {
-              if (this.get('selectedDates')[index] === undefined
-                  || moment(this.get('selectedDates')[index]).isSame(dayObj.date) > 0){
+              if (this.get('selectedDates')[index] === undefined ||
+                    moment(this.get('selectedDates')[index]).isSame(dayObj.date) > 0){
                   set(dayObj, 'isActive', true);
                   this.get('selectedDates').pushObject(dayObj);
                   inserted = true;
@@ -95,8 +93,8 @@ export default Ember.Component.extend({
 
   isActive(day, returnIndex){
     for (let i = 0; i < this.get('selectedDates').length; i++){
-        let selectedDate = this.get('selectedDates')[i];
-        let testDate = (!returnIndex)? day : day.date
+        let selectedDate = this.get('selectedDates')[i],
+            testDate = (!returnIndex)? day : day.date;
         //Ember.Logger.debug('isActive', i, '\n----',testDate,'\n----' ,selectedDate.date );
         if ( moment(testDate).isSame(moment(selectedDate.date)) ){
             //Ember.Logger.debug('isActive', moment(selectedDate.date));
