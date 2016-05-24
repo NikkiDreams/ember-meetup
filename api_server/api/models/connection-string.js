@@ -1,12 +1,17 @@
+'use strict';
 // place connection string here
-// e.g. var uri = 'mongodb://andy:corn@ds051334.mongolab.com:51334/cli';
-// or   var uri = 'mongodb://andy:corn@localhost:27017/cli';
-// or   var uri = config.get('mongo');
-var uri = '';
-if (!uri) throw new Error('\033[31mYou need to provide the connection string. \
-You can open "models/connection-string.js" and export it or use the "setUri" command.\033[0m');
-else {
-  var cmd = uri.match(/^mongodb:\/\/(\w+):(.*?)@(.*?):(\d+)\/(\w+)$/);
-  if (!cmd) throw new Error('\033[31m Improperly formatted URI: \033[0m' + uri);
+// e.g. let uri = 'mongodb://andy:corn@ds051334.mongolab.com:51334/cli';
+// or   let uri = 'mongodb://andy:corn@localhost:27017/cli';
+// or   let uri = config.get('mongo');
+let uri = 'mongodb://me:me@localhost:27017/sched1';
+if (!uri){
+  throw new Error('You need to provide the connection string. You can open "models/connection-string.js" and export it or use the "setUri" command.');
 }
-module.exports = uri;
+else {
+  let cmd = uri.match(/^mongodb:\/\/(\w+):(.*?)@(.*?):(\d+)\/(\w+)$/);
+  console.log('xxxxx',cmd);
+  if (!cmd) {
+    throw new Error('Improperly formatted URI: ' + uri);
+  }
+}
+export default uri;

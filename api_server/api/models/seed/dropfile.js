@@ -1,14 +1,15 @@
-var mongoose = require('mongoose');
+'use strict';
+import mongoose from 'mongoose';
 
 // require all models in the 'models' directory
-var models = require('../all-models');
+import models from '../all-models';
 
 
-var args = process.argv.slice(2);
-var state = { count: 0 };
+let args = process.argv.slice(2);
+let state = { count: 0 };
 if (!args.length) {
   state.total = Object.keys(models).length;
-  for (var name in models) {
+  for (let name in models) {
     models[name].remove({}, () => {
       state.count++;
     });

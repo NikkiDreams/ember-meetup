@@ -1,30 +1,31 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var debug = require('debug')('ember-meetup');
+'use strict';
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+let debug = require('debug')('ember-meetup');
 if (mongoose.connection.readyState === 0) {
-  mongoose.connect(require('./connection-string'));
+  //mongoose.connect(require('./connection-string'));
 }
 
 
-var newSchema = new Schema({
+let creatorSchema = new Schema({
   '_id': { type: Schema.Types.ObjectId, ref: 'participant', index: true },
   'createdAt': { type: Date, default: Date.now },
   'updatedAt': { type: Date, default: Date.now }
 });
 
-newSchema.pre('save', function(next){
+creatorSchema.pre('save', function(next){
   this.updatedAt = Date.now();
   next();
 });
 
-newSchema.pre('update', function() {
+creatorSchema.pre('update', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
-newSchema.pre('findOneAndUpdate', function() {
+creatorSchema.pre('findOneAndUpdate', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
 
 
-module.exports = mongoose.model('Creator', newSchema);
+export default mongoose.model('Creator', creatorSchema);

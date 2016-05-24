@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+'use strict';
+import mongoose from 'mongoose';
 
 require('../all-models').toContext(global);
 
@@ -9,7 +10,7 @@ require('../all-models').toContext(global);
 
 
 // suggested module for generating fake contextual data
-// var Faker = require('faker');
+// let Faker = require('faker');
 
 
 // For Example
@@ -21,9 +22,8 @@ require('../all-models').toContext(global);
 // ])
 
 // .then(() => {
-//   console.log("Seed complete!")  
+//   console.log("Seed complete!")
 //   mongoose.connection.close();
 // });
 
 // be sure to close the connection once the queries are done
-

@@ -1,25 +1,27 @@
-var express = require('express');
-var Event = require('../models/all-models');
-var debug = require('debug')('ember-meetup');
-var communicator = require('../../lib/communicator');
+'use strict';
+import express from 'express';
+import Event from'../models/Event.js';
+import communicator from'../../lib/communicator';
 
-var getRandomString = function(){
+const debug = require('debug')('ember-meetup');
+
+let getRandomString = function(){
     return require('crypto').randomBytes(16).toString('hex');
 }
 
 exports.model = Event;
 
 exports.verifyEmail = function(req, res, next){
-    var id = req.params.id,
+    let id = req.params.id,
         code = req.params.code;
 
     Event
         .update({
                 '_id' : id,
-                '__private.verificationCode' : code
+                'verificationCode' : code
             }, {
                 'creator.isVerified' : true ,
-                '__private.verificationCode' : getRandomString()
+                'verificationCode' : getRandomString()
             })
         .exec(function(err, num){
             if (err) return handleError(res, err);
@@ -29,12 +31,10 @@ exports.verifyEmail = function(req, res, next){
 }
 
 exports.create = function(req, res, next){
-    var event = req.body;
+    let event = req.body;
 
-    event.__private = {
-        'verificationCode' : getRandomString(),
-        'unsubscribeCode' : getRandomString()
-    }
+    event.verificationCode = getRandomString();
+    event.unsubscribeCode = getRandomString();
 
     return Event
         .create(req.body, function(err, event){
@@ -58,7 +58,7 @@ exports.show = function(req, res, next){
 }
 
 exports.update = function(req, res){
-    var updatedEvent = req.body;
+    let updatedEvent = req.body;
     updatedEvent.updated = Date.now();
 
     Event
@@ -85,7 +85,7 @@ exports.update = function(req, res){
 }
 
 exports.delete = function(req, res, next){
-    var eventId = req.params.id
+    let eventId = req.params.id
     Event
         .update({
             '_id' : eventId
@@ -100,7 +100,7 @@ exports.delete = function(req, res, next){
 }
 
 exports.createComment = function(req, res, next){
-    var eventId = req.params.id,
+    let eventId = req.params.id,
         comment = req.body;
 
     Event
@@ -118,7 +118,7 @@ exports.createComment = function(req, res, next){
 }
 
 exports.deleteComment = function(req, res, next){
-    var eventId = req.params.id,
+    let eventId = req.params.id,
         commentId = req.params.cid;
 
     Event
@@ -135,7 +135,7 @@ exports.deleteComment = function(req, res, next){
 
 
 exports.createParticipant = function(req, res, next){
-    var eventId = req.params.id,
+    let eventId = req.params.id,
         participant = req.body;
 
     Event
@@ -154,7 +154,7 @@ exports.createParticipant = function(req, res, next){
 }
 
 exports.updateParticipant = function(req, res, next){
-    var eventId = req.params.id,
+    let eventId = req.params.id,
         participantId = req.params.pid;
 
     Event
@@ -174,7 +174,7 @@ exports.updateParticipant = function(req, res, next){
 }
 
 exports.deleteParticipant = function(req, res, next){
-    var eventId = req.params.id,
+    let eventId = req.params.id,
         participantId = req.params.pid;
 
     Event

@@ -1,3 +1,4 @@
+'use strict';
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
@@ -9,9 +10,10 @@ import httpStatus from 'http-status';
 import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import winstonInstance from './winston';
-import routes from '../server/routes';
+//import routes from '../api/routes';
 import config from './env';
-import APIError from '../server/helpers/APIError';
+import API from 'json-api';
+import APIError from '../api/helpers/APIError';
 
 const app = express();
 
@@ -31,6 +33,25 @@ app.use(methodOverride());
 app.disable('x-powered-by');
 
 // enable CORS - Cross Origin Resource Sharing
+let allowCrossDomain = function(req, res, next) {
+    if ('OPTIONS' === req.method) {
+      res.header('Access-Control-Allow-Origin', req.headers.origin);
+      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Origin');
+
+      if (req.method === "OPTIONS") {
+        return res.status(200).end();
+      }
+
+      res.status(200).end();
+    }
+    else {
+      res.header('Access-Control-Allow-Origin', '*');
+      next();
+    }
+};
+app.use(allowCrossDomain);
+app.options('*', cors()); // include before other routes
 app.use(cors());
 
 // enable detailed API logging in dev env
@@ -43,10 +64,42 @@ if (config.env === 'development') {
 		msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
 		colorStatus: true 	// Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
 	}));
+	app.set('showStackError', config.env.showStackError);
+  app.set('sendGridAPIKey', config.env.sendGridAPIKey);
 }
 
+app.get('/api', function(req,res){
+		Event.count({}, function(err, count){
+				if (err) res.status(500);
+				res.send('<h2>Count'+numeral(count).format('0,0')+"</h2>");
+		});
+});
+
+// All undefined asset or api routes should return a 404
+//app.route('/:url(api|auth|components|app|bower_components|assets)/*')
+//    .get(error[404]);
+
+// All other routes should redirect to the
+app.route('/api/*')
+.get(function(req, res) {
+		res.render('app');
+});
+
+if (app.get('env') === 'development') {
+		app.use(function(err, req, res, next) {
+				res.status(err.status || 500);
+				res.render('error.ejs', {
+						message: err.message,
+						error: err
+				});
+		});
+}
+
+//let Notifications = require('../api/helpers/NotificationHelper');
+
 // mount all routes on /api path
-app.use('/api', routes);
+app.use('/api', '../api/routes')(app);
+//require('../api/routes/index.js')(app);
 
 // if error is not an instanceOf APIError, convert it.
 app.use((err, req, res, next) => {
@@ -82,5 +135,10 @@ app.use((err, req, res, next) =>		// eslint-disable-line no-unused-vars
 		stack: config.env === 'development' ? err.stack : {}
 	})
 );
+
+app.use(function(req, res, next) {
+	Front.sendError(new APIError(404, undefined, 'Not Found'), req, res);
+});
+
 
 export default app;

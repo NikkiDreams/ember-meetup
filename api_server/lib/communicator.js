@@ -1,5 +1,6 @@
-var util = require('util');
-var EventEmitter = require('events').EventEmitter;
+'use strict';
+import util from 'util';
+import {EventEmitter} from 'events';
 
 function Communicator(){
     EventEmitter.call(this);
@@ -7,4 +8,4 @@ function Communicator(){
 
 util.inherits(Communicator, EventEmitter);
 
-module.exports = new Communicator();
+export default new Communicator();

@@ -1,18 +1,19 @@
 'use strict';
-var config = require('config');
-var showErrors = config.get('errors.showStack');
+import config from '../../config';
 
-module.exports = function errorHandler(err, req, res, next){
+let showErrors = config.get('errors.showStack');
+
+function errorHandler(err, req, res, next){
   if (err.status) res.statusCode = err.status;
   if (res.statusCode < 400) res.statusCode = 500;
   req.headers = req.headers || {};
-  var accept = req.headers.accept || '';
+  let accept = req.headers.accept || '';
   // json
   if (~accept.indexOf('json')) {
-    var error = { message: err.message};
+    let error = { message: err.message};
     if(showErrors) error.stack = err.stack;
-    for (var prop in err) error[prop] = err[prop];
-    var json = JSON.stringify({ error: error });
+    for (let prop in err) error[prop] = err[prop];
+    let json = JSON.stringify({ error: error });
     res.setHeader('Content-Type', 'application/json');
     res.end(json);
   // plain text
@@ -21,3 +22,5 @@ module.exports = function errorHandler(err, req, res, next){
     res.end(err.message);
   }
 };
+
+export default errorHandler;

@@ -1,3 +1,4 @@
+'use strict';
 import httpStatus from 'http-status';
 
 /**

@@ -1,13 +1,13 @@
 'use strict';
-var JSONStream = require('JSONStream');
-var Model = require('../models/person');
+import JSONStream from 'JSONStream';
+import Participant from '../models/participant';
 
 function GET(req, res, next){
   if(!req.swagger.params.id){
     res.set('Content-Type', 'application/json');
-    Model.find(req.swagger.params).stream().pipe(JSONStream.stringify()).pipe(res);
+    Participant.find(req.swagger.params).stream().pipe(JSONStream.stringify()).pipe(res);
   }else{
-    Model.findOne(req.params, function findOneCb(err, doc){
+    Participant.findOne(req.params, function findOneCb(err, doc){
       if(err){
         next(err);
       }else if(doc){
@@ -20,8 +20,8 @@ function GET(req, res, next){
 }
 
 function POST(req, res, next){
-  var M = Model;
-  var doc = new M(req.body);
+  let M = Participant;
+  let doc = new M(req.body);
   doc.save(function saveCb(err){
     if(err){
       next(err);
@@ -32,7 +32,7 @@ function POST(req, res, next){
 }
 
 function PUT(req, res, next){
-  Model.update(req.swagger.params, req.body, function updateCb(err){
+  Participant.update(req.swagger.params, req.body, function updateCb(err){
     if(err){
       next(err);
     }else{
@@ -42,7 +42,7 @@ function PUT(req, res, next){
 }
 
 function DEL(req, res, next){
-  Model.remove(req.params, function removeCb(err){
+  Participant.remove(req.params, function removeCb(err){
     if(err){
       next(err);
     }else{
@@ -50,8 +50,7 @@ function DEL(req, res, next){
     }
   });
 }
-
-module.exports = {
+export default {
   GET: GET,
   POST: POST,
   PUT: PUT,

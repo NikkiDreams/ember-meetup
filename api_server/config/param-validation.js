@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 export default {
 	// POST /api/users
+	/*
 	createUser: {
 		body: {
 			username: Joi.string().required(),
@@ -19,4 +20,5 @@ export default {
 			userId: Joi.string().hex().required()
 		}
 	}
+	*/
 };

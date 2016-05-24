@@ -1,17 +1,29 @@
+'use strict';
 import express from 'express';
-import userRoutes from './user';
-import eventRoutes from './event';
+const router = express.Router();
 
-const router = express.Router();	// eslint-disable-line new-cap
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.json('index', {
+      data: {
+        title: 'Ember-Meetup API Server',
+        description: 'Ember-Meetup API Server is a standalone JSONApi Service \
+        		to support Ember-Meetup as a standalone application. However, Ember-Meetup \
+         	  is designed to be used as an Embedded Ember Application or Service.',
+        date: new Date()
+      },
+      status: 200
+  });
+});
 
 /** GET /health-check - Check service health */
-router.get('/health-check', (req, res) =>
-	res.send('OK')
-);
-
-// mount user routes at /users
-router.use('/users', userRoutes);
-
-router.use('/events', eventRoutes);
+router.get('/health-check', (req, res) => {
+  res.json({
+    data:{
+      message:'OK',
+      status: 200
+    }
+  });
+});
 
 export default router;
