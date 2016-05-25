@@ -23,6 +23,11 @@ module.exports = function(environment) {
         modalRootElementId: 'modal-overlays'
       }
       */
+      babel: {
+        includePolyfill: true,
+        only: "../api_server",
+        comments: false
+      }
 
     },
     moment: {

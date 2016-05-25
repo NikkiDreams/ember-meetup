@@ -1,0 +1,17 @@
+{
+  "presets": [
+    "es2015",
+    "stage-3"
+  ],
+  "plugins": [
+    "add-module-exports"
+  ],
+  "only": [
+    "./app.js",
+    "./api",
+    "./config",
+    "./lib",
+    "./test"
+  ],
+  "compact": false
+}
