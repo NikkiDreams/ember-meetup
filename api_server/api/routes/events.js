@@ -55,7 +55,7 @@ let	models = {
 
 let adapter = new API.dbAdapters.Mongoose(models);
 let registry = new API.ResourceTypeRegistry({
-    "event": {
+    "events": {
       urlTemplates: {
 				self: "http://localhost:3000/docs/events/",
     		relationship: "http://127.0.0.1:3000/api/events/{ownerId}/relationships/{path}"

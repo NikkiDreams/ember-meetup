@@ -3,6 +3,8 @@ import moment from 'moment';
 
 const {
   Component,
+  computed,
+  getOwner,
   inject,
   set
 } = Ember;
@@ -23,15 +25,29 @@ export default Component.extend({
   eventDays: Ember.A([]),
   selectedDates: Ember.A([]),
 
+  selectedDatesChanged: Ember.observer('selectedDates.[]', function(list) {
+    // deal with the change
+    Ember.run(list, 'updateDates');
+    //Ember.Logger.debug('selectedDates Array Changed:', this.get('selectedDates'));
+  }),
+
   init() {
     this._super(...arguments);
     this.set('selectedDates', []);
   },
 
-  selectedDatesChanged: Ember.on('init', Ember.observer('selectedDates.[]', function() {
-    // deal with the change
-    //Ember.Logger.debug('selectedDates Array Changed:', this.get('selectedDates'));
-  })),
+  updateDates(){
+    let list = this.get('selectedDates'),
+        applicationInstance = getOwner(this),
+        store = applicationInstance.lookup('service:store');
+        store.unloadAll('date');
+    list.forEach((dateTime, index) => {
+      dateTime['id'] = uuid();
+      console.log('date', dateTime, store);
+      store.createRecord('date', dateTime);
+    });
+    return list;
+  },
 
   didReceiveAttrs(){
     this.set('activeDate', moment(this.get('today')));
