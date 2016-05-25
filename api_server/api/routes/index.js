@@ -4,7 +4,7 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.json('index', {
+  res.status(200).json('index', {
       data: {
         title: 'Ember-Meetup API Server',
         description: 'Ember-Meetup API Server is a standalone JSONApi Service \
@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 
 /** GET /health-check - Check service health */
 router.get('/health-check', (req, res) => {
-  res.json({
+  res.status(200).json({
     data:{
       message:'OK',
       status: 200

@@ -1,14 +1,16 @@
 'use strict';
-let mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
 let Schema = mongoose.Schema;
 let debug = require('debug')('ember-meetup');
 if (mongoose.connection.readyState === 0) {
+  //console.error("DataBase appears to be down.");
   //mongoose.connect(require('./connection-string'));
 }
 
 
-let eventSchema = new Schema({
-  '_id': { type: Schema.Types.ObjectId, unique: true, index: true, ref: '' },
+let schema = new Schema({
+  //'_id': { type: Schema.Types.ObjectId, unique: true, index: true, ref: '' },
   'description': { type: String },
   'title': { type: String },
   'location': { type: String },
@@ -19,29 +21,43 @@ let eventSchema = new Schema({
   '_unsubscribeCode': { type: String },
   'creatorId': { type: Schema.Types.ObjectId, ref: 'creator' },
   'participants': { type: Array, ref: 'participant' },
-  'dates': { type: Array, ref: 'date' },
+  'dates': { type: Array, ref: 'eventDate' },
   'selectedDate': { type: Schema.Types.ObjectId, ref: 'date' },
   'comments': { type: Array, ref: 'comment' },
   'createdAt': { type: Date, default: Date.now },
   'updatedAt': { type: Date, default: Date.now }
 });
 
-eventSchema.pre('save', function(next){
+schema.set({
+  safe: true,
+  strict: true,
+  toJSON:{
+    getters: true,
+    virtuals: false,
+    minimize: true
+  },
+  versionKey: false,
+  validateBeforeSave: true,
+  timestamps: true,
+  useNestedStrict: true
+});
+
+schema.pre('save', function(next){
   this.updatedAt = Date.now();
   next();
 });
 
-eventSchema.pre('update', function() {
+schema.pre('update', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
-eventSchema.pre('findOneAndUpdate', function() {
+schema.pre('findOneAndUpdate', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
+
+//var model = mongoose.model('Event', schema);
 /*
-var model = mongoose.model('Event', eventSchema);
-
 model.schema
     .path('title')
     .required('You need to give your event a title');
@@ -72,4 +88,4 @@ model.schema
     }, 'Participants must have a name')
 */
 
-export default mongoose.model('Event', eventSchema);
+export default mongoose.model('Event', schema);

@@ -27,11 +27,10 @@ import httpStatus from 'http-status';
 import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import winstonInstance from './config/winston';
-//import routes from './api/routes';
 import config from './config/env';
 import API from 'json-api';
 import APIError from './api/helpers/APIError';
-//import templates from 'express-handlebars';
+import exphbs from 'express-handlebars';
 
 
 /* Instantiante Express APP Obj ********************************* */
@@ -47,10 +46,12 @@ let _events = require('./api/routes/events');
 let _users = require('./api/routes/users');
 
 
-
-/* view engine setup */
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', 'jade');
+/* view engine setup ********************************* */
+let hbs = exphbs.create({defaultLayout: 'main', extname: '.hbs'});
+app.set('views', path.join(__dirname, './mvc-app/views'));
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.enable('view cache');
 
 /* Set Logger ********************************* */
 // enable detailed API logging in dev env
@@ -85,21 +86,20 @@ app.disable('x-powered-by');
 
 /* uncomment after placing your favicon in /public ********************************* */
 /* If you use MVC options uncomment static options */
-/*
 var options = {
   dotfiles: 'ignore',
   etag: false,
-  extensions: ['htm', 'html'],
+  extensions: ['htm', 'html', 'jpg', 'png', 'gif'],
   index: false,
-  maxAge: '1d',
+  maxAge: '1h',
   redirect: false,
   setHeaders: function (res, path, stat) {
     res.set('x-timestamp', Date.now());
   }
 }
-*/
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-//app.use(express.static('public', options));
+
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(express.static('public', options));
 //app.use(express.static('uploads'));
 //app.use(express.static('files'));
 
@@ -134,7 +134,7 @@ app.use('/api/users', _users);
 /*
 app.route('/api/*')
 	.get(function(req, res) {
-		res.json('app');
+		res.status(status).json('app');
 });
 */
 
@@ -154,21 +154,19 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.json('error', {
+    res.status(err.status || 500).json('error', {
       message: err.message,
       error: err
-    });
+    }).end();
   });
 } else {
 	// production error handler
 	// no stacktraces leaked to user
 	app.use(function(err, req, res, next) {
-	  res.status(err.status || 500);
-	  res.json('error', {
+	  res.status(err.status || 500).json('error', {
 	    message: err.message,
 	    error: {}
-	  });
+	  }).end();
 	});
 }
 
@@ -193,12 +191,12 @@ app.use((req, res, next) => {
 });
 
 // error handler, send stacktrace only during development
-app.use((err, req, res, next) =>		// eslint-disable-line no-unused-vars
+app.use((err, req, res, next) =>{	// eslint-disable-line no-unused-vars
 	res.status(err.status).json({
 		message: err.isPublic ? err.message : httpStatus[err.status],
 		stack: config.env === 'development' ? err.stack : {}
-	})
-);
+	});
+});
 
 app.use(function(req, res, next) {
 	Front.sendError(new APIError(404, undefined, 'Not Found'), req, res);

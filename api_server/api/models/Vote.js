@@ -7,8 +7,8 @@ if (mongoose.connection.readyState === 0) {
 }
 
 
-let voteSchema = new Schema({
-  '_id': { type: Schema.Types.ObjectId, ref: '' },
+let schema = new Schema({
+  //'_id': { type: Schema.Types.ObjectId, ref: '' },
   'eventId': { type: Schema.Types.ObjectId, ref: 'Event' },
   'voterId': { type: Schema.Types.ObjectId, ref: 'Participant' },
   'chad': { type: Boolean, default: false },
@@ -16,19 +16,33 @@ let voteSchema = new Schema({
   'updatedAt': { type: Date, default: Date.now }
 });
 
-voteSchema.pre('save', function(next){
+schema.set({
+  safe: true,
+  strict: true,
+  toJSON:{
+    getters: true,
+    virtuals: false,
+    minimize: true
+  },
+  versionKey: false,
+  validateBeforeSave: true,
+  timestamps: true,
+  useNestedStrict: true
+});
+
+schema.pre('save', function(next){
   this.updatedAt = Date.now();
   next();
 });
 
-voteSchema.pre('update', function() {
+schema.pre('update', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
-voteSchema.pre('findOneAndUpdate', function() {
+schema.pre('findOneAndUpdate', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
 
 
-export default mongoose.model('Vote', voteSchema);
+export default mongoose.model('Vote', schema);

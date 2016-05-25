@@ -9,7 +9,7 @@ if (!uri){
 }
 else {
   let cmd = uri.match(/^mongodb:\/\/(\w+):(.*?)@(.*?):(\d+)\/(\w+)$/);
-  console.log('xxxxx',cmd);
+  //console.log('xxxxx',cmd);
   if (!cmd) {
     throw new Error('Improperly formatted URI: ' + uri);
   }

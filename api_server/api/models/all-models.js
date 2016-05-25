@@ -2,9 +2,10 @@
 import fs from 'fs';
 //require all the models
 let models = {};
-let names = fs.readdirSync('/');
+let names = fs.readdirSync('./api_server/api/models');
 
 names.forEach(name => {
+
   if (!name.match(/\.js$/)) {
     return;
   }
@@ -26,5 +27,5 @@ Object.defineProperty(models.__proto__, 'toContext', {
   }
 });
 
-
-export defalt models;
+  //console.log("NAME_",models);
+export default models;

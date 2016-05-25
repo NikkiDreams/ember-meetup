@@ -7,8 +7,8 @@ if (mongoose.connection.readyState === 0) {
 }
 
 
-let participantSchema = new Schema({
-  '_id': { type: Schema.Types.ObjectId, unique: true, index: true, ref: '' },
+let schema = new Schema({
+  //'_id': { type: Schema.Types.ObjectId, unique: true, index: true, ref: '' },
   'name': { type: String },
   'email': { type: String, unique: true },
   'isVerified': { type: Boolean,default: false },
@@ -17,19 +17,33 @@ let participantSchema = new Schema({
   'updatedAt': { type: Date, default: Date.now }
 });
 
-participantSchema.pre('save', function(next){
+schema.set({
+  safe: true,
+  strict: true,
+  toJSON:{
+    getters: true,
+    virtuals: false,
+    minimize: true
+  },
+  versionKey: false,
+  validateBeforeSave: true,
+  timestamps: true,
+  useNestedStrict: true
+});
+
+schema.pre('save', function(next){
   this.updatedAt = Date.now();
   next();
 });
 
-participantSchema.pre('update', function() {
+schema.pre('update', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
-participantSchema.pre('findOneAndUpdate', function() {
+schema.pre('findOneAndUpdate', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
 
 
-export default mongoose.model('Participant', participantSchema);
+export default mongoose.model('Participant', schema);

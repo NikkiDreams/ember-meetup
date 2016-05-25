@@ -1,17 +1,19 @@
 'use strict';
 import express from 'express';
-import Event from'../models/Event.js';
-import communicator from'../../lib/communicator';
+import mongoose from 'mongoose';
+import Event from '../models/Event.js';
+import communicator from '../../lib/communicator';
 
 const debug = require('debug')('ember-meetup');
+const ObjectId = mongoose.Types.ObjectId;
 
 let getRandomString = function(){
     return require('crypto').randomBytes(16).toString('hex');
 }
 
-exports.model = Event;
+//exports.model = Event;
 
-exports.verifyEmail = function(req, res, next){
+exports.verifyEmail = (req, res, next) => {
     let id = req.params.id,
         code = req.params.code;
 
@@ -30,36 +32,81 @@ exports.verifyEmail = function(req, res, next){
         });
 }
 
-exports.create = function(req, res, next){
+exports.create = (req, res, next) => {
     let event = req.body;
 
     event.verificationCode = getRandomString();
     event.unsubscribeCode = getRandomString();
 
+    console.log("NEW EVENT---", event);
+
     return Event
         .create(req.body, function(err, event){
-            if (err) return handleError(res, err);
-            if (!event) return res.status(404);
+            if (err){
+              return handleError(res, err);
+            }
+            if (!event){
+              return res.status(404);
+            }
             communicator.emit('event:create', event);
             req.event = event;
             next();
         });
 }
 
-exports.show = function(req, res, next){
-    Event
-        .findById(req.params.id)
-        .exec(function(err, event){
-            if (err) return handleError(res, err);
-            if (!event) return res.status(404).end();
-            req.event = event;
-            next();
-        });
+exports.show = (req, res, next) => {
+  let _id = ObjectId.isValid(req.params.id) ? req.params.id : ObjectId.fromString( _id );
+  if (_id){
+    // Yes, it's a valid ObjectId, proceed with `findById` call.
+    console.log("GOOD ID",req.params, _id);
+  }
+  else{
+    console.log("BADD ID-1",req.params, _id);
+  }
+  Event
+      .findById(_id)
+      .exec((err, event)=>{
+          if (err){
+            return handleError(res, err);
+          }
+          if (!event){
+            return res.status(404).json({message:"Event "+_id+" not Found"}).end();
+          }
+          req.event = event;
+          next();
+      });
 }
 
-exports.update = function(req, res){
+exports.list = (req, res, next) => {
+  Event
+      .find({})
+      .populate('eventDate')
+      .populate('creator')
+      .populate('comment')
+      .populate('participant')
+      .exec((err, event)=>{
+          if (err){
+            return handleError(res, err);
+          }
+          if (!event){
+            return res.status(404).json({message:"No Events Found"}).end();
+          }
+          //req.event = event;
+          return res.status(200).json({data:event}).end();
+          next();
+      });
+}
+
+exports.update = (req, res) => {
     let updatedEvent = req.body;
     updatedEvent.updated = Date.now();
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    // Yes, it's a valid ObjectId, proceed with `findById` call.
+      console.log("GOOD ID",req.params);
+    }
+    else{
+      console.log("BADD ID-2",req.params);
+    }
 
     Event
         .findById(req.params.id)
@@ -84,7 +131,7 @@ exports.update = function(req, res){
         });
 }
 
-exports.delete = function(req, res, next){
+exports.delete = (req, res, next) => {
     let eventId = req.params.id
     Event
         .update({
@@ -99,9 +146,16 @@ exports.delete = function(req, res, next){
         });
 }
 
-exports.createComment = function(req, res, next){
+exports.createComment = (req, res, next) => {
     let eventId = req.params.id,
         comment = req.body;
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    // Yes, it's a valid ObjectId, proceed with `findById` call.
+      console.log("GOOD ID",req.params);
+    }
+    else{
+      console.log("BADD ID-3",req.params);
+    }
 
     Event
         .findById(eventId)
@@ -117,10 +171,16 @@ exports.createComment = function(req, res, next){
         });
 }
 
-exports.deleteComment = function(req, res, next){
+exports.deleteComment = (req, res, next) => {
     let eventId = req.params.id,
         commentId = req.params.cid;
-
+        if (id.match(/^[0-9a-fA-F]{24}$/)) {
+        // Yes, it's a valid ObjectId, proceed with `findById` call.
+          console.log("GOOD ID",req.params);
+        }
+        else{
+          console.log("BADD ID-4",req.params);
+        }
     Event
         .findById(eventId)
         .exec(function(err, event){
@@ -134,10 +194,16 @@ exports.deleteComment = function(req, res, next){
 }
 
 
-exports.createParticipant = function(req, res, next){
+exports.createParticipant = (req, res, next) => {
     let eventId = req.params.id,
         participant = req.body;
-
+        if (id.match(/^[0-9a-fA-F]{24}$/)) {
+        // Yes, it's a valid ObjectId, proceed with `findById` call.
+          console.log("GOOD ID",req.params);
+        }
+        else{
+          console.log("BADD ID-5",req.params);
+        }
     Event
         .findById(eventId)
         .exec(function(err, event){
@@ -153,7 +219,7 @@ exports.createParticipant = function(req, res, next){
     });
 }
 
-exports.updateParticipant = function(req, res, next){
+exports.updateParticipant = (req, res, next) => {
     let eventId = req.params.id,
         participantId = req.params.pid;
 
@@ -173,10 +239,16 @@ exports.updateParticipant = function(req, res, next){
         });
 }
 
-exports.deleteParticipant = function(req, res, next){
+exports.deleteParticipant = (req, res, next) => {
     let eventId = req.params.id,
         participantId = req.params.pid;
-
+        if (id.match(/^[0-9a-fA-F]{24}$/)) {
+        // Yes, it's a valid ObjectId, proceed with `findById` call.
+          console.log("GOOD ID",req.params);
+        }
+        else{
+          console.log("BADD ID-6",req.params);
+        }
     Event
         .findById(eventId)
         .exec(function(err, event){

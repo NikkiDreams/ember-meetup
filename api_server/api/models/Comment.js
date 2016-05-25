@@ -7,8 +7,8 @@ if (mongoose.connection.readyState === 0) {
 }
 
 
-let commentSchema = new Schema({
-  '_id': { type: Schema.Types.ObjectId, unique: true, ref: '' },
+let schema = new Schema({
+  //'_id': { type: Schema.Types.ObjectId, unique: true, ref: '' },
   'eventId': { type: Schema.Types.ObjectId, ref: 'event' },
   'authorId': { type: Schema.Types.ObjectId, ref: 'participant' },
   'content': { type: String },
@@ -16,19 +16,33 @@ let commentSchema = new Schema({
   'updatedAt': { type: Date, default: Date.now }
 });
 
-commentSchema.pre('save', function(next){
+schema.set({
+  safe: true,
+  strict: true,
+  toJSON:{
+    getters: true,
+    virtuals: false,
+    minimize: true
+  },
+  versionKey: false,
+  validateBeforeSave: true,
+  timestamps: true,
+  useNestedStrict: true
+});
+
+schema.pre('save', function(next){
   this.updatedAt = Date.now();
   next();
 });
 
-commentSchema.pre('update', function() {
+schema.pre('update', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
-commentSchema.pre('findOneAndUpdate', function() {
+schema.pre('findOneAndUpdate', function() {
   this.update({}, { $set: { updatedAt: Date.now() } });
 });
 
 
 
-export default mongoose.model('Comment', commentSchema);
+export default mongoose.model('Comment', schema);

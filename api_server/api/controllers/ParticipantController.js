@@ -2,6 +2,7 @@
 import JSONStream from 'JSONStream';
 import Participant from '../models/participant';
 
+/*
 function GET(req, res, next){
   if(!req.swagger.params.id){
     res.set('Content-Type', 'application/json');
@@ -56,3 +57,5 @@ export default {
   PUT: PUT,
   DEL: DEL
 };
+
+*/
