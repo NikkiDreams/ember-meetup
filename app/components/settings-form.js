@@ -70,9 +70,15 @@ export default Ember.Component.extend({
     },
 
     close() {
-      this.toggleProperty('isShowingPollModal', false);
-      this.toggleProperty('isShowingNotifyModal', false);
-      this.toggleProperty('isDeletedModal', false);
+      if(this.get('isShowingPollModal')){
+        this.toggleProperty('isShowingPollModal', false);
+      }
+      if(this.get('isShowingNotifyModal')){
+        this.toggleProperty('isShowingNotifyModal', false);
+      }
+      if(this.get('isDeletedModal')){
+        this.toggleProperty('isDeletedModal', false);
+      }
       console.log('close',this.get('isShowingModal'));
     }
   }

@@ -8,21 +8,22 @@ const {
 } = DS;
 
 export default Model.extend({
-      creator : belongsTo('creator'),
-
+      creatorId : attr('string'),
       description : attr('string'),
       location: attr('string'),
       title : attr('string'),
-      dates : hasMany('date'),
+      selectedDate : attr('string'),
 
+      dates : hasMany('eventDate'),
       participants : hasMany('participant'),
       comments : hasMany('comment'),
-
-      created : attr('date', { defaultValue() { return new Date(); } }),
-      updated : attr('date'),
 
       isOpenPoll : attr('boolean', {defaultValue : false}),
       isNotified : attr('boolean', {defaultValue : true}),
       isDeleted : attr('boolean', {defaultValue : false}),
-      __private : belongsTo('code')
+      _verificationCode : attr('string'),
+      _unsubscribeCode : attr('string'),
+
+      createdAt : attr('date', { defaultValue() { return new Date(); } }),
+      updatedAt : attr('date'),
 });

@@ -40,11 +40,11 @@ export default Component.extend({
     let list = this.get('selectedDates'),
         applicationInstance = getOwner(this),
         store = applicationInstance.lookup('service:store');
-        store.unloadAll('date');
+        store.unloadAll('event-date');
     list.forEach((dateTime, index) => {
       dateTime['id'] = uuid();
-      console.log('date', dateTime, store);
-      store.createRecord('date', dateTime);
+      console.log('event-date', dateTime, store);
+      store.createRecord('event-date', dateTime);
     });
     return list;
   },

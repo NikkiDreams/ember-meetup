@@ -1,8 +1,5 @@
 import Ember from 'ember';
-import moment from 'moment';
-import {
-  validator, buildValidations
-} from 'ember-cp-validations';
+import { validator, buildValidations } from 'ember-cp-validations';
 
 const {
   Component,
@@ -12,9 +9,28 @@ const {
   get
 } = Ember;
 
+const Validations = buildValidations({
+  'name': {
+    description: 'Name',
+    validators: [
+      validator('presence', true),
+      validator('length', { min: 3 })
+    ]
+  },
+  'email': {
+    description: 'Email',
+    validators:[
+      validator('presence', true),
+      validator('format', { type: 'email' }),
+      validator('length', { min: 6 })
+    ]
+  }
+});
 
-export default Ember.Component.extend( {
-  moment: Ember.inject.service(),
+
+export default Component.extend(Validations, {
+  store: inject.service(),
+  
   errors: {},
   name: null,
   email: null

@@ -6,5 +6,9 @@ const {
 } = DS;
 
 export default Model.extend({
-  vote: attr('boolean', {defaultValue: true})
+  'eventId': attr('string'),
+  'voterId': attr('string'),
+  'chad': attr('boolean', {defaultValue : false}),
+  'createdAt': attr('date', { defaultValue() { return new Date(); } }),
+  'updatedAt': attr('date', { defaultValue() { return new Date(); } })
 });

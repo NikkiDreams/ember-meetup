@@ -26,7 +26,5 @@ let Validations = buildValidations({
 
 export default Model.extend(Validations,{
   name :  attr('string'),
-  email :  attr('string'),
-  isVerified : attr('boolean', {defaultValue : false}),
-  allowNotifications : attr('boolean', {defaultValue : false})
+  email :  attr('string')
 });

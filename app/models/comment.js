@@ -6,7 +6,9 @@ const {
 } = DS;
 
 export default Model.extend({
-  authorName : attr('string'),
+  eventId : attr('string'),
+  authorId : attr('string'),
   content : attr('string'),
-  created : attr('date', { defaultValue() { return new Date(); } })
+  createdAt : attr('date', { defaultValue() { return new Date(); } }),
+  updatedAt : attr('date', { defaultValue() { return new Date(); } })
 });
