@@ -1,5 +1,7 @@
 'use strict';
 import express from 'express';
+import app from '../../app';
+
 const router = express.Router();
 
 /* GET home page. */

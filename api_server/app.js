@@ -15,7 +15,6 @@
 import express from 'express';
 import Promise from 'bluebird';
 import mongoose from 'mongoose';
-import logger from 'morgan';
 import path from 'path';
 import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
@@ -25,11 +24,10 @@ import methodOverride from 'method-override';
 import cors from 'cors';
 import httpStatus from 'http-status';
 import expressWinston from 'express-winston';
-import expressValidation from 'express-validation';
-import winstonInstance from './config/winston';
+import winstonInstance from 'winston';
+import logger from './config/winston';
+import Color from 'colors/safe';
 import config from './config/env';
-import API from 'json-api';
-import APIError from './api/helpers/APIError';
 import exphbs from 'express-handlebars';
 
 
@@ -56,22 +54,21 @@ app.enable('view cache');
 /* Set Logger ********************************* */
 // enable detailed API logging in dev env
 if (config.env === 'development') {
-	app.use(logger('dev'));
-	expressWinston.requestWhitelist.push('body');
-	expressWinston.responseWhitelist.push('body');
-	app.use(expressWinston.logger({
-		winstonInstance,
-		meta: true, 	// optional: log meta data about request (defaults to true)
-		msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-		colorStatus: true 	// Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
-	}));
+	console.log(Color.yellow('\n!WARNING:**************************************************:WARNING!\n'));
+	console.log(Color.red('!WARNING!: The API server is running in development mode!'));
+	console.log(Color.red('           Set NODE_ENV=production or test if this is not right.'));
+	console.log(Color.yellow('\n!WARNING:**************************************************:WARNING!\n\n'));
 	app.set('showStackError', config.env.showStackError);
   app.set('sendGridAPIKey', config.env.sendGridAPIKey);
-} else if (config.env !== 'test' && config.env !== 'development') {
+	expressWinston.requestWhitelist.push('body');
+	expressWinston.responseWhitelist.push('body');
+	app.use(expressWinston.logger({ winstonInstance }));
+	logger.log('silly', "127.0.0.1 - there's no place like home");
+}
+else if (config.env !== 'test' && config.env !== 'development') {
 	// log error in winston transports except when executing test suite
-	app.use(expressWinston.errorLogger({
-		winstonInstance
-	}));
+	app.use(expressWinston.logger({ winstonInstance }));
+	logger.log('info', "127.0.0.1 - there's no place like home");
 }
 
 /* parse body params and attache them to req.body ********************************* */
@@ -125,6 +122,11 @@ app.use(allowCrossDomain);
 app.options('*', cors()); // include before other routes
 app.use(cors());
 
+app.use((req, res, next) => {
+  console.log('%s %s', req.method, req.url);
+  next();
+});
+
 /* Mount Routes ********************************* */
 app.use('/', _index);
 app.use('/api/events', _events);
@@ -140,66 +142,24 @@ app.route('/api/*')
 
 /* ERROR HAndlers ********************************* */
 // All undefined asset or api routes should return a 404
-//app.route('/:url(api|auth|components|app|bower_components|assets)/*')
-//    .get(error[404]);
+//app.route('/:url(api|auth|components|app|bower_components|assets)/*').get(error[404]);
 // catch 404 and forward to error handler
+
+
+app.use(function(err, req, res, next) {
+	res.status(err.status || 500).json('error', {
+		data: {
+			message: 'Dev Environment ERROR: ' + err.message,
+			error: err
+		}
+	}).end();
+});
+
+
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
-});
-
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500).json('error', {
-      message: err.message,
-      error: err
-    }).end();
-  });
-} else {
-	// production error handler
-	// no stacktraces leaked to user
-	app.use(function(err, req, res, next) {
-	  res.status(err.status || 500).json('error', {
-	    message: err.message,
-	    error: {}
-	  }).end();
-	});
-}
-
-// if error is not an instanceOf APIError, convert it.
-app.use((err, req, res, next) => {
-	if (err instanceof expressValidation.ValidationError) {
-		// validation error contains errors which is an array of error each containing message[]
-		const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
-		const error = new APIError(unifiedErrorMessage, err.status, true);
-		return next(error);
-	} else if (!(err instanceof APIError)) {
-		const apiError = new APIError(err.message, err.status, err.isPublic);
-		return next(apiError);
-	}
-	return next(err);
-});
-
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-	const err = new APIError('API not found', httpStatus.NOT_FOUND);
-	return next(err);
-});
-
-// error handler, send stacktrace only during development
-app.use((err, req, res, next) =>{	// eslint-disable-line no-unused-vars
-	res.status(err.status).json({
-		message: err.isPublic ? err.message : httpStatus[err.status],
-		stack: config.env === 'development' ? err.stack : {}
-	});
-});
-
-app.use(function(req, res, next) {
-	Front.sendError(new APIError(404, undefined, 'Not Found'), req, res);
 });
 
 

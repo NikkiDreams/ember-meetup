@@ -1,17 +1,52 @@
 'use strict';
 import express from 'express';
 import mongoose from 'mongoose';
+import JSONAPIDeserializer from 'jsonapi-serializer/lib/deserializer';
+import JSONAPISerializer from 'jsonapi-serializer/lib/serializer';
+import logger from '../../config/winston';
+import app from '../../app';
 import Event from '../models/Event.js';
-import communicator from '../../lib/communicator';
+import communicator from '../../middleware/communicator';
+
 
 const debug = require('debug')('ember-meetup');
 const ObjectId = mongoose.Types.ObjectId;
-
-let getRandomString = function(){
+const getRandomString = ()=>{
     return require('crypto').randomBytes(16).toString('hex');
 }
 
-//exports.model = Event;
+const JSONAPI_OPTIONS_SERIALIZE = {
+	ref: null,
+	included: true,
+	attributes: ['location', 'title' ,'description'],
+	topLevelLinks: '', // () => {}
+	dataLinks: '', // () => {}
+	relationshipLinks: {}, // () => {}
+	relationshipMeta: '', // () => {}
+	ignoreRelationshipData: false,
+	keyForAttribute: 'camelCase', // () => {}
+	pluralizeType: true,
+	typeForAttribute(){ return; },
+	meta: {name:'non-standard-meta-info'}
+}
+const _JSONresponse = new JSONAPISerializer('events', JSONAPI_OPTIONS_SERIALIZE);
+
+const JSONAPI_OPTIONS_DESERIALIZE = {
+		keyForAttribute: 'dash-case', // () => {}
+		AN_ATTRIBUTE_TYPE: {}
+}
+const _JSONrequest = new JSONAPIDeserializer('event', JSONAPI_OPTIONS_DESERIALIZE);
+
+const _JSONAPIify = (req, res) => {
+	   if (req.body.data){
+		       let event = _JSONresponse.serialize(req.body.data);
+		       //delete event['__private'];
+		       res.status(200).json(event).end();
+   	}
+		 else {
+		       res.status(204).end();
+	   }
+}
 
 exports.verifyEmail = (req, res, next) => {
     let id = req.params.id,
@@ -25,15 +60,19 @@ exports.verifyEmail = (req, res, next) => {
                 'creator.isVerified' : true ,
                 'verificationCode' : getRandomString()
             })
-        .exec(function(err, num){
-            if (err) return handleError(res, err);
-            if (num == 0) return res.status(498).end();
+        .exec((err, num)=>{
+            if (err){
+              return handleError(res, err);
+            }
+            if (num == 0){
+              return res.status(498).end();
+            }
             next();
         });
 }
 
 exports.create = (req, res, next) => {
-    let event = req.body;
+    let event = _JSONrequest.deserialize(req.body.data);
 
     event.verificationCode = getRandomString();
     event.unsubscribeCode = getRandomString();
@@ -41,8 +80,9 @@ exports.create = (req, res, next) => {
     console.log("NEW EVENT---", event);
 
     return Event
-        .create(req.body, function(err, event){
+        .create(event, function(err, event){
             if (err){
+              logger.debug("something went terribly wrong: ", err)
               return handleError(res, err);
             }
             if (!event){
@@ -110,7 +150,7 @@ exports.update = (req, res) => {
 
     Event
         .findById(req.params.id)
-        .exec(function(err, event){
+        .exec((err, event)=>{
             if (err) return handleError(res, err);
             if (!event) return res.status(404).end();
             // If the creator's email has changed OR the notifications setting has changed - start a new email confirmation transaction
@@ -124,7 +164,7 @@ exports.update = (req, res) => {
 
             Event
                 .update({ '_id' : req.params.id }, updatedEvent)
-                .exec(function(){
+                .exec(()=>{
                     communicator.emit('event:update', updatedEvent, event);
                     return res.status(204).end();
                 });
@@ -139,9 +179,13 @@ exports.delete = (req, res, next) => {
         }, {
             'isDeleted' : true
         })
-        .exec(function(err, num){
-            if (err) return handleError(res, err);
-            if (num == 0) return res.status(498).end();
+        .exec((err, num)=>{
+            if (err){
+              return handleError(res, err);
+            }
+            if (num == 0){
+              return res.status(498).end();
+            }
             next();
         });
 }
@@ -159,11 +203,13 @@ exports.createComment = (req, res, next) => {
 
     Event
         .findById(eventId)
-        .exec(function(err, event){
+        .exec((err, event)=>{
             if (err) return handleError(res, err);
             event.comments.push(comment);
-            event.save(function(err, event){
-                if (err) return next(err);
+            event.save((err, event)=>{
+                if (err) {
+                  return next(err);
+                }
                 communicator.emit('comment:add', event, comment);
                 req.event = event;
                 next();
@@ -183,10 +229,12 @@ exports.deleteComment = (req, res, next) => {
         }
     Event
         .findById(eventId)
-        .exec(function(err, event){
-            if (err) return handleError(res, err);
+        .exec((err, event)=>{
+            if (err){
+              return handleError(res, err);
+            }
             event.comments.pull({ '_id' : commentId });
-            event.save(function(err, event){
+            event.save((err, event)=>{
                 req.event = event;
                 next();
             })
@@ -206,12 +254,14 @@ exports.createParticipant = (req, res, next) => {
         }
     Event
         .findById(eventId)
-        .exec(function(err, event){
+        .exec((err, event)=>{
             if (err) return handleError(res, err);
             event.updated = Date.now();
             event.participants.push(participant);
             event.save(function(err, event){
-                if (err) return next(err);
+                if (err) {
+                  return next(err);
+                }
                 communicator.emit('participant:add', event, participant);
                 req.event = event;
                 next();
@@ -233,8 +283,10 @@ exports.updateParticipant = (req, res, next) => {
                 'participants.$' : req.body
             }
         })
-        .exec(function(err, num){
-            if (err) return handleError(res, err);
+        .exec((err, num)=>{
+            if (err){ return
+              handleError(res, err);
+            }
             res.status(204).end();
         });
 }
@@ -252,10 +304,12 @@ exports.deleteParticipant = (req, res, next) => {
     Event
         .findById(eventId)
         .exec(function(err, event){
-            if (err) return handleError(res, err);
+            if (err){
+              return handleError(res, err);
+            }
             event.updated = Date.now();
             event.participants.pull({ '_id' : participantId });
-            event.save(function(err, event){
+            event.save((err, event)=>{
                 req.event = event;
                 next();
             })
@@ -264,6 +318,6 @@ exports.deleteParticipant = (req, res, next) => {
 
 
 function handleError(res, err) {
-    debug("ERROR: " + err);
-    return res.status(500).send(err);
+    logger.log("ERROR: " + err);
+    return res.status(500).json({ data:{ message:err }});
 }
